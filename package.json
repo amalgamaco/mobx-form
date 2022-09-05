@@ -1,0 +1,90 @@
+{
+	"name": "@amalgama/mobx-form",
+	"version": "0.0.0",
+	"description": "A set of classes for managing forms and fields with MobX.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist/**/*"
+	],
+	"scripts": {
+		"build": "tsc",
+		"lint": "eslint src/ tests/",
+		"test": "JEST_JUNIT_OUTPUT_DIR=reports jest",
+		"release": "release-it"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@git.amalgama.co:amalgama/packages/npm/mobx-form.git"
+	},
+	"keywords": [
+		"form",
+		"field",
+		"validation",
+		"mobx"
+	],
+	"license": "ISC",
+	"publishConfig": {
+		"@amalgama:registry": "https://git.amalgama.co/api/v4/projects/982/packages/npm/"
+	},
+	"devDependencies": {
+		"@types/jest": "^29.1.1",
+		"@typescript-eslint/eslint-plugin": "^5.39.0",
+		"@typescript-eslint/parser": "^5.39.0",
+		"eslint": "^8.24.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-import-resolver-typescript": "^3.5.1",
+		"eslint-plugin-import": "^2.26.0",
+		"jest": "^29.1.2",
+		"jest-junit": "^14.0.1",
+		"release-it": "^15.5.0",
+		"ts-jest": "^29.0.3",
+		"typescript": "^4.8.4"
+	},
+	"jest": {
+		"collectCoverage": true,
+		"collectCoverageFrom": [
+			"<rootDir>/src/**/*.ts",
+			"!<rootDir>/src/index.ts"
+		],
+		"coverageDirectory": "<rootDir>/reports/coverage",
+		"coverageReporters": [
+			"json",
+			"lcov",
+			"text",
+			"text-summary",
+			"cobertura"
+		],
+		"reporters": [
+			"default",
+			"jest-junit"
+		],
+		"testMatch": [
+			"<rootDir>/tests/**/?(*.)(spec|test).ts"
+		],
+		"transform": {
+			"^.+\\.jsx?$": "ts-jest"
+		},
+		"preset": "ts-jest"
+	},
+	"release-it": {
+		"git": {
+			"tagName": "v${version}",
+			"requireCleanWorkingDir": false,
+			"requireUpstream": true,
+			"commitMessage": "Release v${version}",
+			"changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --issue-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/issues/{id} --merge-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/merge_requests/{id} --commit-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/commit/{id}"
+		},
+		"hooks": {
+			"after:bump": "npx auto-changelog -p"
+		},
+		"gitlab": {
+			"release": true,
+			"publish": true,
+			"releaseName": "Release v${version}"
+		},
+		"npm": {
+			"skipChecks": true
+		}
+	}
+}
