@@ -1,10 +1,11 @@
-image: node:17.0.1
+image: node:18
 
 variables:
   FF_USE_FASTZIP: "true"
   ARTIFACT_COMPRESSION_LEVEL: default
   CACHE_COMPRESSION_LEVEL: fast
   TRANSFER_METER_FREQUENCY: 5s
+  AMALGAMA_PACKAGE_REGISTRY_API: //git.amalgama.co/api/v4/projects/982/packages/npm/
 
 cache: &global_cache
   - key:
@@ -34,6 +35,7 @@ yarn:
   cache:
     untracked: true
   script:
+    - npm config set -- "${AMALGAMA_PACKAGE_REGISTRY_API}:_authToken" "${AMALGAMA_PACKAGE_REGISTRY_AUTH_TOKEN}"
     - yarn install
   tags:
     - docker
