@@ -54,3 +54,4 @@ export default class Field<ValueType> {
 }
 
 export type { FieldParams } from './types';
+export type ValueType<F> = F extends Field<infer V> ? V : never;
