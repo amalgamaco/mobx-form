@@ -14,6 +14,7 @@ export default class Field<ValueType> {
 	private _value: ValueType;
 	private _initialValue: ValueType;
 	private _validators: FieldValidator<ValueType>[];
+	private _error: string;
 
 	private _parentForm?: Form;
 
@@ -31,6 +32,7 @@ export default class Field<ValueType> {
 		this._value = value;
 		this._initialValue = value;
 		this._validators = validators;
+		this._error = '';
 
 		makeAutoObservable( this );
 	}
@@ -40,11 +42,15 @@ export default class Field<ValueType> {
 	}
 
 	get isValid() {
-		return this._validators.every( validator => this.acceptsValue( validator ) );
+		return !this.actualErrorMessage;
 	}
 
 	get isDirty() {
 		return this._value !== this._initialValue;
+	}
+
+	get error() {
+		return this._error;
 	}
 
 	change( newValue: ValueType ) {
@@ -55,14 +61,24 @@ export default class Field<ValueType> {
 		this._value = this._initialValue;
 	}
 
+	syncError() {
+		this._error = this.actualErrorMessage || '';
+	}
+
 	attachToForm( form: Form ) {
 		if ( this._parentForm ) throw fieldAlreadyAttachedError( this.label );
 
 		this._parentForm = form;
 	}
 
-	private acceptsValue( validator: FieldValidator<ValueType> ) {
-		return validator( this._value, this._parentForm, this.label ) === '';
+	private get actualErrorMessage() {
+		return this.validationMessages.find( message => message !== '' );
+	}
+
+	private get validationMessages() {
+		return this._validators.map(
+			validator => validator( this._value, this._parentForm, this.label )
+		);
 	}
 }
 
