@@ -1,5 +1,6 @@
 import Field from '../src/Field';
 import type { FieldParams } from '../src/Field';
+import Form from '../src/Form';
 
 describe( 'Field', () => {
 	const label = 'A field';
@@ -116,6 +117,45 @@ describe( 'Field', () => {
 			field.reset();
 
 			expect( field.value ).toEqual( initialValue );
+		} );
+	} );
+
+	describe( '@attachToForm', () => {
+		const createAndAttachField = () => {
+			const validator = jest.fn(
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				( _value: string, _form?: Form, _label?: string ) => ''
+			);
+
+			const form = new Form( {
+				fields: {},
+				onSubmit: () => Promise.resolve()
+			} );
+
+			const field = createField( { validators: [ validator ] } );
+
+			field.attachToForm( form );
+
+			return { field, form, validator };
+		};
+
+		describe( 'when the field is not attached to any form', () => {
+			it( 'starts passing the given form and field key to the validators', () => {
+				const { field, form, validator } = createAndAttachField();
+
+				// eslint-disable-next-line no-unused-expressions
+				field.isValid;
+
+				expect( validator ).toHaveBeenCalledWith( field.value, form, field.label );
+			} );
+		} );
+
+		describe( 'when the field is already attached to a form', () => {
+			it( 'throws a runtime error', () => {
+				const { field, form } = createAndAttachField();
+
+				expect( () => field.attachToForm( form ) ).toThrow( Error );
+			} );
 		} );
 	} );
 } );
