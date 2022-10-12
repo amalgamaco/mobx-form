@@ -9,3 +9,5 @@ export interface FieldParams<ValueType> {
 	validators?: FieldValidator<ValueType>[],
 	disabled?: boolean
 }
+
+export type AnnotatedPrivateFieldProps = '_value' | '_error' | '_parentForm' | 'actualErrorMessage';

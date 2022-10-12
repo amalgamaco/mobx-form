@@ -1,20 +1,22 @@
-import { makeAutoObservable } from 'mobx';
-import type { FieldParams, FieldValidator } from './types';
+import {
+	action, computed, makeObservable, observable
+} from 'mobx';
+import type { AnnotatedPrivateFieldProps, FieldParams, FieldValidator } from './types';
 import type Form from '../Form';
 
 const fieldAlreadyAttachedError = ( label: string ) => new Error(
 	`Tried to re-attach a field with label "${label}". Fields can only be attached to a Form instance once.`
 );
 
-export default class Field<ValueType> {
+export default abstract class Field<ValueType> {
 	readonly label: string;
 	readonly hint: string;
 	readonly isDisabled: boolean;
 
-	private _value: ValueType;
-	private _initialValue: ValueType;
-	private _validators: FieldValidator<ValueType>[];
-	private _error: string;
+	protected _value: ValueType;
+	protected readonly _initialValue: ValueType;
+	protected readonly _validators: FieldValidator<ValueType>[];
+	protected _error: string;
 
 	private _parentForm?: Form;
 
@@ -34,7 +36,19 @@ export default class Field<ValueType> {
 		this._validators = validators;
 		this._error = '';
 
-		makeAutoObservable( this );
+		makeObservable<Field<ValueType>, AnnotatedPrivateFieldProps>( this, {
+			value: computed,
+			isValid: computed,
+			isDirty: computed,
+			error: computed,
+			reset: action,
+			syncError: action,
+			attachToForm: action,
+			_value: observable,
+			_error: observable,
+			_parentForm: observable,
+			actualErrorMessage: computed
+		} );
 	}
 
 	get value() {
@@ -51,10 +65,6 @@ export default class Field<ValueType> {
 
 	get error() {
 		return this._error;
-	}
-
-	change( newValue: ValueType ) {
-		this._value = newValue;
 	}
 
 	reset() {

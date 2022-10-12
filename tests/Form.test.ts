@@ -1,4 +1,5 @@
-import Field from '../src/Field';
+import ManualField from '../src/ManualField';
+import TestField from './support/TestField';
 import Form, { FormParams } from '../src/Form';
 
 describe( 'Form', () => {
@@ -44,11 +45,11 @@ describe( 'Form', () => {
 
 	const createForm = ( params?: Partial<FormParams> ) => new Form( {
 		fields: {
-			email: new Field( fields.email ),
-			password: new Field( fields.password ),
-			passwordConfirmation: new Field( fields.passwordConfirmation ),
-			document: new Field( fields.document ),
-			admin: new Field( fields.admin )
+			email: new TestField( fields.email ),
+			password: new TestField( fields.password ),
+			passwordConfirmation: new TestField( fields.passwordConfirmation ),
+			document: new TestField( fields.document ),
+			admin: new ManualField( fields.admin )
 		},
 		onSubmit,
 		...params
@@ -57,8 +58,8 @@ describe( 'Form', () => {
 	const createFormAndMakeItValid = () => {
 		const form = createForm();
 
-		form.select( 'password' ).change( 'validpass' );
-		form.select( 'passwordConfirmation' ).change( 'validpass' );
+		form.select<TestField>( 'password' ).change( 'validpass' );
+		form.select<TestField>( 'passwordConfirmation' ).change( 'validpass' );
 
 		return form;
 	};
@@ -92,8 +93,8 @@ describe( 'Form', () => {
 			it( 'returns the values of the dirty fields', () => {
 				const form = createForm();
 
-				form.select( 'email' ).change( 'new@test.com' );
-				form.select( 'admin' ).change( false );
+				form.select<TestField>( 'email' ).change( 'new@test.com' );
+				form.select<ManualField<boolean>>( 'admin' ).change( false );
 
 				expect( form.dirtyValues ).toEqual( {
 					email: 'new@test.com',
@@ -107,7 +108,7 @@ describe( 'Form', () => {
 		describe( 'when all fields are valid', () => {
 			it( 'returns true', () => {
 				const form = createFormAndMakeItValid();
-				form.select( 'document' ).change( 'validdoc' );
+				form.select<TestField>( 'document' ).change( 'validdoc' );
 
 				expect( form.isValid ).toBe( true );
 			} );
@@ -125,7 +126,7 @@ describe( 'Form', () => {
 			it( 'returns false', () => {
 				const form = createFormAndMakeItValid();
 
-				form.select( 'passwordConfirmation' ).change( 'is not the password' );
+				form.select<TestField>( 'passwordConfirmation' ).change( 'is not the password' );
 
 				expect( form.isValid ).toBe( false );
 			} );
@@ -145,7 +146,7 @@ describe( 'Form', () => {
 			it( 'returns true', () => {
 				const form = createForm();
 
-				form.select( 'password' ).change( 'sekret' );
+				form.select<TestField>( 'password' ).change( 'sekret' );
 
 				expect( form.isDirty ).toBe( true );
 			} );
@@ -165,7 +166,7 @@ describe( 'Form', () => {
 			it( 'returns false', () => {
 				const form = createForm( {
 					fields: {
-						email: new Field( fields.email )
+						email: new TestField( fields.email )
 					}
 				} );
 
@@ -196,7 +197,7 @@ describe( 'Form', () => {
 		it( 'returns the field that has the given key', () => {
 			const form = createForm();
 
-			const documentField = form.select<Field<string>>( 'document' );
+			const documentField = form.select<TestField>( 'document' );
 
 			expect( documentField.label ).toEqual( 'Document' );
 			expect( documentField.value ).toEqual( 'unused' );
@@ -207,8 +208,8 @@ describe( 'Form', () => {
 	describe( '@submit', () => {
 		it( 'syncronizes the errors of all fields', () => {
 			const form = createFormAndMakeItValid();
-			const email = form.select( 'email' );
-			const password = form.select( 'password' );
+			const email = form.select<TestField>( 'email' );
+			const password = form.select<TestField>( 'password' );
 			email.change( '' );
 			email.syncError();
 			email.change( 'valid@again.com' );
@@ -305,8 +306,8 @@ describe( 'Form', () => {
 		it( 'resets all the fields', () => {
 			const form = createForm();
 
-			form.select( 'email' ).change( 'dirty@test.com' );
-			form.select( 'password' ).change( 'dirty' );
+			form.select<TestField>( 'email' ).change( 'dirty@test.com' );
+			form.select<TestField>( 'password' ).change( 'dirty' );
 			form.reset();
 
 			expect( form.values ).toEqual( {
