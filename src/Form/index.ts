@@ -1,5 +1,7 @@
 import { makeAutoObservable } from 'mobx';
-import { forEach, pickBy, some } from 'lodash';
+import {
+	every, forEach, pickBy, some
+} from 'lodash';
 import { AsyncAction } from '@amalgama/mobx-async-action';
 import Field, { type ValueType } from '../Field';
 import type {
@@ -15,6 +17,8 @@ export default class Form {
 		this.fields = fields;
 		this.onSubmit = new AsyncAction<FormSubmitCallback>( onSubmit );
 
+		this.attachFields();
+
 		makeAutoObservable( this );
 	}
 
@@ -26,12 +30,16 @@ export default class Form {
 		return valuesOf( this.dirtyFields );
 	}
 
+	get isValid() {
+		return every( this.enabledFields, field => field.isValid );
+	}
+
 	get isDirty() {
 		return some( this.fields, field => field.isDirty );
 	}
 
 	get isReadyToSubmit() {
-		return this.isDirty && !this.isSubmitting;
+		return this.isValid && this.isDirty && !this.isSubmitting;
 	}
 
 	get isSubmitting() {
@@ -42,18 +50,35 @@ export default class Form {
 		return this.fields[ fieldKey ] as FieldType;
 	}
 
-	submit() {
-		if ( this.isSubmitting ) return Promise.resolve();
+	async submit() {
+		this.syncFieldErrors();
+		if ( !this.isValid || this.isSubmitting ) return;
 
-		return this.onSubmit.execute( this );
+		await this.onSubmit.execute( this );
 	}
 
 	reset() {
 		forEach( this.fields, field => field.reset() );
 	}
 
-	private get dirtyFields(): FormFields {
-		return pickBy( this.fields, field => field.isDirty );
+	private attachFields() {
+		forEach( this.fields, field => field.attachToForm( this ) );
+	}
+
+	private get dirtyFields() {
+		return this.pickFieldsBy( field => field.isDirty );
+	}
+
+	private get enabledFields() {
+		return this.pickFieldsBy( field => !field.isDisabled );
+	}
+
+	private pickFieldsBy( predicate: ( field: Field<unknown> ) => boolean ): FormFields {
+		return pickBy( this.fields, predicate );
+	}
+
+	private syncFieldErrors() {
+		forEach( this.fields, field => field.syncError() );
 	}
 }
 
