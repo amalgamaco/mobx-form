@@ -319,4 +319,28 @@ describe( 'Form', () => {
 			} );
 		} );
 	} );
+
+	describe( '@showErrors', () => {
+		it( 'shows the given errors on the fields', () => {
+			const form = createForm();
+			const errors = {
+				email: 'This email is being used',
+				document: 'This document failed the external validation'
+			};
+
+			form.showErrors( {
+				email: 'This email is being used',
+				document: 'This document failed the external validation'
+			} );
+
+			expect( form.select( 'email' ).error ).toEqual( errors.email );
+			expect( form.select( 'document' ).error ).toEqual( errors.document );
+		} );
+
+		it( 'ignores errors for fields that do not exist', () => {
+			const form = createForm();
+
+			expect( () => form.showErrors( { age: 'Invalid' } ) ).not.toThrow();
+		} );
+	} );
 } );

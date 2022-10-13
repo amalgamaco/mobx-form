@@ -61,6 +61,10 @@ export default class Form {
 		forEach( this.fields, field => field.reset() );
 	}
 
+	showErrors( errors: Record<string, string> ) {
+		forEach( errors, ( error, fieldKey ) => this.showErrorOnField( fieldKey, error ) );
+	}
+
 	private attachFields() {
 		forEach( this.fields, field => field.attachToForm( this ) );
 	}
@@ -79,6 +83,10 @@ export default class Form {
 
 	private syncFieldErrors() {
 		forEach( this.fields, field => field.syncError() );
+	}
+
+	private showErrorOnField( fieldKey: string, error: string ) {
+		this.fields[ fieldKey ]?.showError( error );
 	}
 }
 
