@@ -55,8 +55,8 @@ describe( 'Form', () => {
 		...params
 	} );
 
-	const createFormAndMakeItValid = () => {
-		const form = createForm();
+	const createFormAndMakeItValid = ( params?: Partial<FormParams> ) => {
+		const form = createForm( params );
 
 		form.select<TestField>( 'password' ).change( 'validpass' );
 		form.select<TestField>( 'passwordConfirmation' ).change( 'validpass' );
@@ -260,6 +260,14 @@ describe( 'Form', () => {
 					} catch {
 						expect( form.isSubmitting ).toBe( false );
 					}
+				} );
+			} );
+
+			describe( 'when the onSubmit callback does not return anything', () => {
+				it( 'returns a resolved promise', async () => {
+					const form = createForm( { onSubmit: () => undefined } );
+
+					await expect( form.submit() ).resolves.not.toThrow();
 				} );
 			} );
 		} );
