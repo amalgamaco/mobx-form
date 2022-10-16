@@ -49,4 +49,4 @@ export default class Input<ValueType> extends Field<ValueType> {
 	}
 }
 
-export type { InputParams } from './types';
+export type { InputParams };

@@ -1,13 +1,18 @@
 import TestField from './support/TestField';
 import type { FieldParams } from '../src/Field';
 import Form from '../src/Form';
+import { invalid, valid } from '../src/validators';
 
 describe( 'Field', () => {
 	const label = 'A field';
 	const hint = 'Some hint';
 	const initialValue = 'Content';
-	const presenceValidator = ( value: string ) => ( value ? '' : 'This is required.' );
-	const lengthValidator = ( value: string ) => ( value.length <= 7 ? '' : 'Too long!' );
+	const presenceValidator = ( value: string ) => (
+		value ? valid() : invalid( 'This is required.' )
+	);
+	const lengthValidator = ( value: string ) => (
+		value.length <= 7 ? valid() : invalid( 'Too long!' )
+	);
 	const disabled = false;
 
 	const createField = ( params?: Partial<FieldParams<string>> ) => new TestField( {
@@ -178,7 +183,7 @@ describe( 'Field', () => {
 		const createAndAttachField = () => {
 			const validator = jest.fn(
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				( _value: string, _form?: Form, _label?: string ) => ''
+				( _value: string, _form?: Form, _label?: string ) => valid()
 			);
 
 			const form = new Form( {
