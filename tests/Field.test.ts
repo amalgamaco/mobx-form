@@ -120,6 +120,59 @@ describe( 'Field', () => {
 		} );
 	} );
 
+	describe( '@syncError', () => {
+		describe( 'when the field is valid', () => {
+			describe( 'and no error is being shown', () => {
+				it( 'does not show any error message on the field', () => {
+					const field = createField();
+
+					field.syncError();
+
+					expect( field.error ).toEqual( '' );
+				} );
+			} );
+
+			describe( 'and an error is being shown', () => {
+				it( 'hides the shown error message', () => {
+					const field = createField();
+
+					field.change( '' );
+					field.syncError();
+					field.change( 'good' );
+					field.syncError();
+
+					expect( field.error ).toEqual( '' );
+				} );
+			} );
+		} );
+
+		describe( 'when the field is invalid', () => {
+			describe( 'and no error is being shown', () => {
+				it( 'shows the error message of the first failing validator', () => {
+					const field = createField();
+
+					field.change( 'quite long' );
+					field.syncError();
+
+					expect( field.error ).toEqual( 'Too long!' );
+				} );
+			} );
+
+			describe( 'and an error is being shown', () => {
+				it( 'shows the error message of the first failing validator', () => {
+					const field = createField();
+
+					field.change( 'quite long' );
+					field.syncError();
+					field.change( '' );
+					field.syncError();
+
+					expect( field.error ).toEqual( 'This is required.' );
+				} );
+			} );
+		} );
+	} );
+
 	describe( '@attachToForm', () => {
 		const createAndAttachField = () => {
 			const validator = jest.fn(
