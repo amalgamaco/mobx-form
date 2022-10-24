@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 import { forEach, pickBy, some } from 'lodash';
 import { AsyncAction } from '@amalgama/mobx-async-action';
-import Field from '../Field';
+import Field, { type ValueType } from '../Field';
 import type {
 	FormFields, FormParams, FormSubmitCallback, FormValues
 } from './types';
@@ -38,7 +38,7 @@ export default class Form {
 		return this.onSubmit.isExecuting;
 	}
 
-	select<FieldType extends Field<unknown>>( fieldKey: string ) {
+	select<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
 		return this.fields[ fieldKey ] as FieldType;
 	}
 
