@@ -1,11 +1,8 @@
-import type { FieldValidator, ValidationResult } from './types';
+export { email } from './email';
+export { length } from './length';
+export { maxLength } from './maxLength';
+export { minLength } from './minLength';
+export { required } from './required';
+export { invalid, valid } from './results';
 
-export const valid = (): ValidationResult => ( {
-	isValid: true, error: ''
-} );
-
-export const invalid = ( error: string ): ValidationResult => ( {
-	isValid: false, error
-} );
-
-export type { FieldValidator, ValidationResult };
+export type { FieldValidator, ValidationResult } from './types';

@@ -30,7 +30,9 @@
 	"dependencies": {
 		"@amalgama/mobx-async-action": "^1.0.2",
 		"@types/lodash": "^4.14.186",
-		"lodash": "^4.17.21"
+		"@types/validator": "^13.7.8",
+		"lodash": "^4.17.21",
+		"validator": "^13.7.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.1.1",
