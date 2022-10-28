@@ -1,4 +1,4 @@
-import Field from '../src/Field';
+import TestField from './support/TestField';
 import type { FieldParams } from '../src/Field';
 import Form from '../src/Form';
 
@@ -10,7 +10,7 @@ describe( 'Field', () => {
 	const lengthValidator = ( value: string ) => ( value.length <= 7 ? '' : 'Too long!' );
 	const disabled = false;
 
-	const createField = ( params?: Partial<FieldParams<string>> ) => new Field<string>( {
+	const createField = ( params?: Partial<FieldParams<string>> ) => new TestField( {
 		label,
 		hint,
 		value: initialValue,
@@ -96,16 +96,6 @@ describe( 'Field', () => {
 					expect( field.isDirty ).toBe( false );
 				} );
 			} );
-		} );
-	} );
-
-	describe( '@change', () => {
-		it( 'updates the value of the field with the given one', () => {
-			const field = createField();
-
-			field.change( 'New content' );
-
-			expect( field.value ).toEqual( 'New content' );
 		} );
 	} );
 
