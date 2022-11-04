@@ -163,6 +163,17 @@ describe( 'Field', () => {
 		} );
 	} );
 
+	describe( '@showError', () => {
+		it( 'displays the given error on the field', () => {
+			const field = createField();
+			const error = 'That value is already being used';
+
+			field.showError( error );
+
+			expect( field.error ).toEqual( error );
+		} );
+	} );
+
 	describe( '@attachToForm', () => {
 		const createAndAttachField = () => {
 			const validator = jest.fn(

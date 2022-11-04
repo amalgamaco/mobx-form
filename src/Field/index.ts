@@ -75,6 +75,10 @@ export default abstract class Field<ValueType> {
 		this._error = this.actualErrorMessage || '';
 	}
 
+	showError( errorMessage: string ) {
+		this._error = errorMessage;
+	}
+
 	attachToForm( form: Form ) {
 		if ( this._parentForm ) throw fieldAlreadyAttachedError( this.label );
 
