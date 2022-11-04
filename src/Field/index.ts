@@ -1,8 +1,9 @@
 import {
 	action, computed, makeObservable, observable
 } from 'mobx';
-import type { AnnotatedPrivateFieldProps, FieldParams, FieldValidator } from './types';
+import type { AnnotatedPrivateFieldProps, FieldParams } from './types';
 import type Form from '../Form';
+import type { FieldValidator } from '../validators';
 
 const fieldAlreadyAttachedError = ( label: string ) => new Error(
 	`Tried to re-attach a field with label "${label}". Fields can only be attached to a Form instance once.`
@@ -47,7 +48,7 @@ export default abstract class Field<ValueType> {
 			_value: observable,
 			_error: observable,
 			_parentForm: observable,
-			actualErrorMessage: computed
+			failedValidationResult: computed
 		} );
 	}
 
@@ -56,7 +57,7 @@ export default abstract class Field<ValueType> {
 	}
 
 	get isValid() {
-		return !this.actualErrorMessage;
+		return !this.failedValidationResult;
 	}
 
 	get isDirty() {
@@ -72,7 +73,7 @@ export default abstract class Field<ValueType> {
 	}
 
 	syncError() {
-		this._error = this.actualErrorMessage || '';
+		this._error = this.failedValidationResult?.error || '';
 	}
 
 	showError( errorMessage: string ) {
@@ -85,16 +86,16 @@ export default abstract class Field<ValueType> {
 		this._parentForm = form;
 	}
 
-	private get actualErrorMessage() {
-		return this.validationMessages.find( message => message !== '' );
+	private get failedValidationResult() {
+		return this.validationResults.find( result => !result.isValid );
 	}
 
-	private get validationMessages() {
+	private get validationResults() {
 		return this._validators.map(
 			validator => validator( this._value, this._parentForm, this.label )
 		);
 	}
 }
 
-export type { FieldParams } from './types';
+export type { FieldParams };
 export type ValueType<F> = F extends Field<infer V> ? V : never;

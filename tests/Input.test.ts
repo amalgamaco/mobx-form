@@ -1,8 +1,11 @@
 import Field from '../src/Field';
 import Input, { type InputParams } from '../src/Input';
+import { invalid, valid } from '../src/validators';
 
 describe( 'Input', () => {
-	const lengthValidator = ( value: string ) => ( value.length >= 8 ? '' : 'Too short' );
+	const lengthValidator = ( value: string ) => (
+		value.length >= 8 ? valid() : invalid( 'Too short' )
+	);
 
 	const createInput = ( params?: Partial<InputParams<string>> ) => new Input<string>( {
 		label: 'Username',

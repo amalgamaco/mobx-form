@@ -90,4 +90,4 @@ export default class Form {
 	}
 }
 
-export type { FormParams, FormValues } from './types';
+export type { FormParams, FormValues };

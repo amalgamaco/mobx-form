@@ -1,12 +1,17 @@
 import ManualField from '../src/ManualField';
 import TestField from './support/TestField';
 import Form, { FormParams } from '../src/Form';
+import { invalid, valid } from '../src/validators';
 
 describe( 'Form', () => {
-	const required = ( value: string ) => ( value ? '' : 'This field is required.' );
-	const atLeastEightChars = ( value: string ) => ( value.length >= 8 ? '' : 'At least eight chars.' );
+	const required = ( value: string ) => (
+		value ? valid() : invalid( 'This field is required.' )
+	);
+	const atLeastEightChars = ( value: string ) => (
+		value.length >= 8 ? valid() : invalid( 'At least eight chars.' )
+	);
 	const matchPassword = ( value: string, form?: Form ) => (
-		value === form?.select( 'password' ).value ? '' : 'Password does not match'
+		value === form?.select( 'password' ).value ? valid() : invalid( 'Password does not match' )
 	);
 
 	const fields = {

@@ -1,6 +1,4 @@
-import type Form from '../Form';
-
-export type FieldValidator<ValueType> = ( value: ValueType, form?: Form, label?: string ) => string;
+import type { FieldValidator } from '../validators';
 
 export interface FieldParams<ValueType> {
 	label?: string,
@@ -10,4 +8,4 @@ export interface FieldParams<ValueType> {
 	disabled?: boolean
 }
 
-export type AnnotatedPrivateFieldProps = '_value' | '_error' | '_parentForm' | 'actualErrorMessage';
+export type AnnotatedPrivateFieldProps = '_value' | '_error' | '_parentForm' | 'failedValidationResult';

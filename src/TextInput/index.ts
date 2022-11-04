@@ -14,4 +14,4 @@ export function textInput( params: TextInputParams ) {
 	return new TextInput( params );
 }
 
-export type { TextInputParams } from './types';
+export type { TextInputParams };

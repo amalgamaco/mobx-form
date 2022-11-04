@@ -1,8 +1,11 @@
 import Field from '../src/Field';
 import ManualField from '../src/ManualField';
+import { invalid, valid } from '../src/validators';
 
 describe( 'ManualField', () => {
-	const after2021 = ( value: Date ) => ( value.getFullYear() > 2021 ? '' : 'Date is invalid' );
+	const after2021 = ( value: Date ) => (
+		value.getFullYear() > 2021 ? valid() : invalid( 'Date is invalid' )
+	);
 	const createField = () => new ManualField<Date>( {
 		value: new Date( 2022, 10, 10 ),
 		validators: [ after2021 ]
