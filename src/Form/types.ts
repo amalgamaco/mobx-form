@@ -1,7 +1,8 @@
 import Field from '../Field';
 import type Form from '.';
 
-export type FormSubmitCallback = ( form: Form ) => Promise<void>;
+export type FormSubmitCallback = ( form: Form ) => void | Promise<void>;
+export type FormSubmitAction = ( form: Form ) => Promise<void>;
 
 export interface FormParams {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

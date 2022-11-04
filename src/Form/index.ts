@@ -2,20 +2,20 @@ import { makeAutoObservable } from 'mobx';
 import {
 	every, forEach, pickBy, some
 } from 'lodash';
-import { AsyncAction } from '@amalgama/mobx-async-action';
+import type { AsyncAction } from '@amalgama/mobx-async-action';
 import Field, { type ValueType } from '../Field';
 import type {
-	FormFields, FormParams, FormSubmitCallback, FormValues
+	FormFields, FormParams, FormSubmitAction, FormValues
 } from './types';
-import { valuesOf } from './utils';
+import { valuesOf, wrapInAsyncAction } from './utils';
 
 export default class Form {
 	private fields: FormFields;
-	private onSubmit: AsyncAction<FormSubmitCallback>;
+	private submitAction: AsyncAction<FormSubmitAction>;
 
 	constructor( { fields, onSubmit }: FormParams ) {
 		this.fields = fields;
-		this.onSubmit = new AsyncAction<FormSubmitCallback>( onSubmit );
+		this.submitAction = wrapInAsyncAction( onSubmit );
 
 		this.attachFields();
 
@@ -43,7 +43,7 @@ export default class Form {
 	}
 
 	get isSubmitting() {
-		return this.onSubmit.isExecuting;
+		return this.submitAction.isExecuting;
 	}
 
 	select<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
@@ -54,7 +54,7 @@ export default class Form {
 		this.syncFieldErrors();
 		if ( !this.isValid || this.isSubmitting ) return;
 
-		await this.onSubmit.execute( this );
+		await this.submitAction.execute( this );
 	}
 
 	reset() {
