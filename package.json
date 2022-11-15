@@ -1,6 +1,6 @@
 {
 	"name": "@amalgama/mobx-form",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "A set of classes for managing forms and fields with MobX.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
