@@ -1,99 +1,83 @@
 import {
 	action, computed, makeObservable, observable
 } from 'mobx';
+import FieldState from '../utils/FieldState';
 import type { AnnotatedPrivateFieldProps, FieldParams } from './types';
 import type Form from '../Form';
-import type { FieldValidator } from '../validators';
-
-const fieldAlreadyAttachedError = ( label: string ) => new Error(
-	`Tried to re-attach a field with label "${label}". Fields can only be attached to a Form instance once.`
-);
 
 export default abstract class Field<ValueType> {
-	readonly label: string;
 	readonly hint: string;
-	readonly isDisabled: boolean;
 
-	protected _value: ValueType;
-	protected readonly _initialValue: ValueType;
-	protected readonly _validators: FieldValidator<ValueType>[];
-	protected _error: string;
-
-	private _parentForm?: Form;
+	protected _state: FieldState<ValueType>;
+	protected _presentedError: string;
 
 	constructor( {
-		label = '',
 		hint = '',
-		value,
-		validators = [],
-		disabled = false
+		...fieldStateParams
 	}: FieldParams<ValueType> ) {
-		this.label = label;
 		this.hint = hint;
-		this.isDisabled = disabled;
 
-		this._value = value;
-		this._initialValue = value;
-		this._validators = validators;
-		this._error = '';
+		this._state = new FieldState( fieldStateParams );
+		this._presentedError = '';
 
 		makeObservable<Field<ValueType>, AnnotatedPrivateFieldProps>( this, {
+			_state: observable,
+			_presentedError: observable,
+			label: computed,
 			value: computed,
 			isValid: computed,
 			isDirty: computed,
 			error: computed,
+			isDisabled: computed,
 			reset: action,
 			syncError: action,
-			attachToForm: action,
-			_value: observable,
-			_error: observable,
-			_parentForm: observable,
-			failedValidationResult: computed
+			showError: action,
+			attachToForm: action
 		} );
 	}
 
+	get label() {
+		return this._state.label;
+	}
+
 	get value() {
-		return this._value;
+		return this._state.value;
 	}
 
 	get isValid() {
-		return !this.failedValidationResult;
+		return this._state.isValid;
 	}
 
 	get isDirty() {
-		return this._value !== this._initialValue;
+		return this._state.isDirty;
 	}
 
 	get error() {
-		return this._error;
+		return this._presentedError;
+	}
+
+	get isDisabled() {
+		return this._state.isDisabled;
 	}
 
 	reset() {
-		this._value = this._initialValue;
+		this._state.reset();
 	}
 
 	syncError() {
-		this._error = this.failedValidationResult?.error || '';
+		this._presentedError = this._state.error || '';
 	}
 
 	showError( errorMessage: string ) {
-		this._error = errorMessage;
+		this._presentedError = errorMessage;
 	}
 
 	attachToForm( form: Form ) {
-		if ( this._parentForm ) throw fieldAlreadyAttachedError( this.label );
-
-		this._parentForm = form;
+		this._state.attachToForm( form );
 	}
 
-	private get failedValidationResult() {
-		return this.validationResults.find( result => !result.isValid );
-	}
-
-	private get validationResults() {
-		return this._validators.map(
-			validator => validator( this._value, this._parentForm, this.label )
-		);
+	protected setValue( newValue: ValueType ) {
+		this._state.setValue( newValue );
 	}
 }
 

@@ -39,7 +39,7 @@ export default class Input<ValueType> extends Field<ValueType> {
 
 	write( newValue: ValueType ) {
 		this.focus();
-		this._value = newValue;
+		this.setValue( newValue );
 		if ( this.isValid || this.showErrors === 'onWrite' ) this.syncError();
 	}
 
