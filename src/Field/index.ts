@@ -29,6 +29,7 @@ export default abstract class Field<ValueType> {
 			isDirty: computed,
 			error: computed,
 			isDisabled: computed,
+			clear: action,
 			reset: action,
 			syncError: action,
 			showError: action,
@@ -60,9 +61,14 @@ export default abstract class Field<ValueType> {
 		return this._state.isDisabled;
 	}
 
+	clear() {
+		this._state.clear();
+		this.hideError();
+	}
+
 	reset() {
 		this._state.reset();
-		this._presentedError = '';
+		this.hideError();
 	}
 
 	syncError() {
@@ -75,6 +81,10 @@ export default abstract class Field<ValueType> {
 
 	attachToForm( form: Form ) {
 		this._state.attachToForm( form );
+	}
+
+	protected hideError() {
+		this._presentedError = '';
 	}
 
 	protected setValue( newValue: ValueType ) {

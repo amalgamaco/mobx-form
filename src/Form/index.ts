@@ -57,8 +57,12 @@ export default class Form {
 		await this.submitAction.execute( this );
 	}
 
+	clear() {
+		this.eachField( field => field.clear() );
+	}
+
 	reset() {
-		forEach( this.fields, field => field.reset() );
+		this.eachField( field => field.reset() );
 	}
 
 	showErrors( errors: Record<string, string> ) {
@@ -83,6 +87,10 @@ export default class Form {
 
 	private syncFieldErrors() {
 		forEach( this.fields, field => field.syncError() );
+	}
+
+	private eachField( action: ( field: Field<unknown> ) => void ) {
+		forEach( this.fields, action );
 	}
 
 	private showErrorOnField( fieldKey: string, error: string ) {
