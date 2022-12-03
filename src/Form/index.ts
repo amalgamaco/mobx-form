@@ -1,4 +1,6 @@
-import { makeAutoObservable } from 'mobx';
+import {
+	action, computed, makeObservable, observable
+} from 'mobx';
 import {
 	every, forEach, pickBy, some
 } from 'lodash';
@@ -19,7 +21,20 @@ export default class Form {
 
 		this.attachFields();
 
-		makeAutoObservable( this );
+		makeObservable<Form, 'fields' | 'submitAction'>( this, {
+			fields: observable,
+			submitAction: observable,
+			values: computed,
+			dirtyValues: computed,
+			isValid: computed,
+			isDirty: computed,
+			isReadyToSubmit: computed,
+			isSubmitting: computed,
+			submit: action,
+			clear: action,
+			reset: action,
+			showErrors: action
+		} );
 	}
 
 	get values(): FormValues {
@@ -89,8 +104,8 @@ export default class Form {
 		forEach( this.fields, field => field.syncError() );
 	}
 
-	private eachField( action: ( field: Field<unknown> ) => void ) {
-		forEach( this.fields, action );
+	private eachField( actionOnField: ( field: Field<unknown> ) => void ) {
+		forEach( this.fields, actionOnField );
 	}
 
 	private showErrorOnField( fieldKey: string, error: string ) {
