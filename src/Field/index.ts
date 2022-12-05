@@ -62,6 +62,7 @@ export default abstract class Field<ValueType> {
 
 	reset() {
 		this._state.reset();
+		this._presentedError = '';
 	}
 
 	syncError() {

@@ -113,6 +113,16 @@ describe( 'Field', () => {
 
 			expect( field.value ).toEqual( initialValue );
 		} );
+
+		it( 'stops showing the error message', () => {
+			const field = createField();
+
+			field.change( '' );
+			field.syncError();
+			field.reset();
+
+			expect( field.error ).toEqual( '' );
+		} );
 	} );
 
 	describe( '@syncError', () => {

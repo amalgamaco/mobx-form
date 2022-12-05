@@ -316,7 +316,7 @@ describe( 'Form', () => {
 	} );
 
 	describe( '@reset', () => {
-		it( 'resets all the fields', () => {
+		it( 'resets the value of each field', () => {
 			const form = createForm();
 
 			form.select<TestField>( 'email' ).change( 'dirty@test.com' );
@@ -329,6 +329,20 @@ describe( 'Form', () => {
 				passwordConfirmation: fields.passwordConfirmation.value,
 				document: fields.document.value,
 				admin: fields.admin.value
+			} );
+		} );
+
+		it( 'clears the error message of each field', () => {
+			const form = createForm();
+
+			form.select<TestField>( 'email' ).change( '' );
+			form.select<TestField>( 'password' ).change( '' );
+			form.submit();
+
+			form.reset();
+
+			[ 'email', 'password', 'passwordConfirmation', 'document', 'admin' ].forEach( ( key ) => {
+				expect( form.select( key ).error ).toEqual( '' );
 			} );
 		} );
 	} );
