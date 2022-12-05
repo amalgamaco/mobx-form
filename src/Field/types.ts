@@ -1,11 +1,5 @@
-import type { FieldValidator } from '../validators';
+import type { FieldStateParams } from '../utils/FieldState';
 
-export interface FieldParams<ValueType> {
-	label?: string,
-	hint?: string,
-	value: ValueType,
-	validators?: FieldValidator<ValueType>[],
-	disabled?: boolean
-}
+export type FieldParams<ValueType> = FieldStateParams<ValueType> & { hint?: string };
 
-export type AnnotatedPrivateFieldProps = '_value' | '_error' | '_parentForm' | 'failedValidationResult';
+export type AnnotatedPrivateFieldProps = '_state' | '_presentedError';

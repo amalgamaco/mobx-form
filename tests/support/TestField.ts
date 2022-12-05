@@ -11,6 +11,6 @@ export default class TestField extends Field<string> {
 	}
 
 	change( newValue: string ) {
-		this._value = newValue;
+		this.setValue( newValue );
 	}
 }

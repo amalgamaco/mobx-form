@@ -11,7 +11,7 @@ export default class ManualField<ValueType> extends Field<ValueType> {
 	}
 
 	change( newValue: ValueType ) {
-		this._value = newValue;
+		this.setValue( newValue );
 		this.syncError();
 	}
 }
