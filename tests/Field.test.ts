@@ -7,6 +7,7 @@ describe( 'Field', () => {
 	const label = 'A field';
 	const hint = 'Some hint';
 	const initialValue = 'Content';
+	const defaultValue = 'Defval';
 	const presenceValidator = ( value: string ) => (
 		value ? valid() : invalid( 'This is required.' )
 	);
@@ -18,6 +19,7 @@ describe( 'Field', () => {
 	const createField = ( params?: Partial<FieldParams<string>> ) => new TestField( {
 		label,
 		hint,
+		defaultValue,
 		value: initialValue,
 		validators: [ presenceValidator, lengthValidator ],
 		disabled,
@@ -34,13 +36,21 @@ describe( 'Field', () => {
 			expect( field.isDisabled ).toEqual( disabled );
 		} );
 
-		describe( 'without the optional attributes', () => {
+		describe( 'without label, hint and disabled attributes', () => {
 			it( 'assigns default values for them', () => {
 				const field = createField( { label: undefined, hint: undefined, disabled: undefined } );
 
 				expect( field.label ).toEqual( '' );
 				expect( field.hint ).toEqual( '' );
 				expect( field.isDisabled ).toBe( false );
+			} );
+		} );
+
+		describe( 'without value', () => {
+			it( 'assigns the given defaultValue as the initial value', () => {
+				const field = createField( { value: undefined, hint: undefined, disabled: undefined } );
+
+				expect( field.value ).toBe( defaultValue );
 			} );
 		} );
 	} );
@@ -101,6 +111,26 @@ describe( 'Field', () => {
 					expect( field.isDirty ).toBe( false );
 				} );
 			} );
+		} );
+	} );
+
+	describe( '@clear', () => {
+		it( 'sets the defaultValue given in constructor as the new value', () => {
+			const field = createField();
+
+			field.clear();
+
+			expect( field.value ).toEqual( defaultValue );
+		} );
+
+		it( 'stops showing the error message', () => {
+			const field = createField();
+
+			field.change( '' );
+			field.syncError();
+			field.clear();
+
+			expect( field.error ).toEqual( '' );
 		} );
 	} );
 

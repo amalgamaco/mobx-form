@@ -18,6 +18,7 @@ describe( 'Form', () => {
 		email: {
 			label: 'Email',
 			hint: 'Write it with a known domain',
+			defaultValue: 'no email',
 			value: 'autofilled@test.com',
 			validators: [ required ],
 			disabled: false
@@ -25,23 +26,27 @@ describe( 'Form', () => {
 		password: {
 			label: 'Password',
 			hint: 'At least 8 characters',
+			defaultValue: 'no password',
 			value: '',
 			validators: [ required, atLeastEightChars ],
 			disabled: false
 		},
 		passwordConfirmation: {
 			label: 'Password confirmation',
+			defaultValue: 'no password confirmation',
 			value: '',
 			validators: [ required, matchPassword ]
 		},
 		document: {
 			label: 'Document',
+			defaultValue: 'no document',
 			value: 'unused',
 			validators: [ atLeastEightChars ],
 			disabled: true
 		},
 		admin: {
 			label: 'Admin?',
+			defaultValue: true,
 			value: true
 		}
 	};
@@ -67,6 +72,22 @@ describe( 'Form', () => {
 		form.select<TestField>( 'passwordConfirmation' ).change( 'validpass' );
 
 		return form;
+	};
+
+	const itClearsTheErrorMessageOfEachField = ( action: ( form: Form ) => void ) => {
+		it( 'clears the error message of each field', () => {
+			const form = createForm();
+
+			form.select<TestField>( 'email' ).change( '' );
+			form.select<TestField>( 'password' ).change( '' );
+			form.submit();
+
+			action( form );
+
+			[ 'email', 'password', 'passwordConfirmation', 'document', 'admin' ].forEach( ( key ) => {
+				expect( form.select( key ).error ).toEqual( '' );
+			} );
+		} );
 	};
 
 	afterEach( () => jest.clearAllMocks() );
@@ -315,6 +336,24 @@ describe( 'Form', () => {
 		} );
 	} );
 
+	describe( '@clear', () => {
+		it( 'sets the value of each field to its default value', () => {
+			const form = createForm();
+
+			form.clear();
+
+			expect( form.values ).toEqual( {
+				email: 'no email',
+				password: 'no password',
+				passwordConfirmation: 'no password confirmation',
+				document: 'no document',
+				admin: true
+			} );
+		} );
+
+		itClearsTheErrorMessageOfEachField( form => form.clear() );
+	} );
+
 	describe( '@reset', () => {
 		it( 'resets the value of each field', () => {
 			const form = createForm();
@@ -332,19 +371,7 @@ describe( 'Form', () => {
 			} );
 		} );
 
-		it( 'clears the error message of each field', () => {
-			const form = createForm();
-
-			form.select<TestField>( 'email' ).change( '' );
-			form.select<TestField>( 'password' ).change( '' );
-			form.submit();
-
-			form.reset();
-
-			[ 'email', 'password', 'passwordConfirmation', 'document', 'admin' ].forEach( ( key ) => {
-				expect( form.select( key ).error ).toEqual( '' );
-			} );
-		} );
+		itClearsTheErrorMessageOfEachField( form => form.reset() );
 	} );
 
 	describe( '@showErrors', () => {

@@ -3,10 +3,10 @@ import type { TextInputParams } from './types';
 
 export default class TextInput extends Input<string> {
 	constructor( {
-		value = '',
+		defaultValue = '',
 		...inputParams
 	}: TextInputParams ) {
-		super( { value, ...inputParams } );
+		super( { defaultValue, ...inputParams } );
 	}
 }
 

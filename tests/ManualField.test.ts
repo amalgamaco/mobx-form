@@ -7,6 +7,7 @@ describe( 'ManualField', () => {
 		value.getFullYear() > 2021 ? valid() : invalid( 'Date is invalid' )
 	);
 	const createField = () => new ManualField<Date>( {
+		defaultValue: new Date(),
 		value: new Date( 2022, 10, 10 ),
 		validators: [ after2021 ]
 	} );

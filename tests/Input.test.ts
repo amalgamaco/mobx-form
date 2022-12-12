@@ -11,6 +11,7 @@ describe( 'Input', () => {
 		label: 'Username',
 		placeholder: 'AwesomeUser',
 		hint: 'Type 5 or more characters',
+		defaultValue: 'default value',
 		value: 'initial value',
 		validators: [ lengthValidator ],
 		disabled: false,
@@ -37,11 +38,12 @@ describe( 'Input', () => {
 
 		describe( 'without the optional attributes', () => {
 			it( 'assigns default values for them', () => {
-				const input = new Input<string>( { value: 'initial value' } );
+				const input = new Input<string>( { defaultValue: 'default value' } );
 
 				expect( input.label ).toEqual( '' );
 				expect( input.placeholder ).toEqual( '' );
 				expect( input.hint ).toEqual( '' );
+				expect( input.value ).toBe( 'default value' );
 				expect( input.isDisabled ).toBe( false );
 			} );
 		} );

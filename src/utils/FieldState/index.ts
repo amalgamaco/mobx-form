@@ -11,6 +11,7 @@ export default class FieldState<ValueType> {
 	readonly label: string;
 	readonly isDisabled: boolean;
 
+	private readonly _defaultValue: ValueType;
 	private _value: ValueType;
 	private readonly _initialValue: ValueType;
 	private readonly _validators: FieldValidator<ValueType>[];
@@ -18,13 +19,15 @@ export default class FieldState<ValueType> {
 
 	constructor( {
 		label = '',
-		value,
+		defaultValue,
+		value = defaultValue,
 		validators = [],
 		disabled = false
 	}: FieldStateParams<ValueType> ) {
 		this.label = label;
 		this.isDisabled = disabled;
 
+		this._defaultValue = defaultValue;
 		this._value = value;
 		this._initialValue = value;
 		this._validators = validators;
@@ -50,6 +53,10 @@ export default class FieldState<ValueType> {
 
 	setValue( newValue: ValueType ) {
 		this._value = newValue;
+	}
+
+	clear() {
+		this._value = this._defaultValue;
 	}
 
 	reset() {
