@@ -15,7 +15,7 @@ export default class Form {
 	private fields: FormFields;
 	private submitAction: AsyncAction<FormSubmitAction>;
 
-	constructor( { fields, onSubmit }: FormParams ) {
+	constructor( { fields, onSubmit = () => undefined }: FormParams ) {
 		this.fields = fields;
 		this.submitAction = wrapInAsyncAction( onSubmit );
 

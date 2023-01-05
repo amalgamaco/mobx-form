@@ -7,7 +7,7 @@ export type FormSubmitAction = ( form: Form ) => Promise<void>;
 export interface FormParams {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	fields: Record<string, Field<any>>,
-	onSubmit: FormSubmitCallback
+	onSubmit?: FormSubmitCallback
 }
 
 export type FormFields = Record<string, Field<unknown>>;
