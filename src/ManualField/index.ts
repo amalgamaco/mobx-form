@@ -14,6 +14,14 @@ export default class ManualField<ValueType> extends Field<ValueType> {
 		this.setValue( newValue );
 		this.syncError();
 	}
+
+	set( newValue: ValueType ) {
+		this.change( newValue );
+	}
+
+	select( newValue: ValueType ) {
+		this.change( newValue );
+	}
 }
 
 export function manualField<ValueType>( params: FieldParams<ValueType> ) {
