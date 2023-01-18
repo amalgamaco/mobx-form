@@ -93,4 +93,3 @@ export default abstract class Field<ValueType> {
 }
 
 export type { FieldParams };
-export type ValueType<F> = F extends Field<infer V> ? V : never;

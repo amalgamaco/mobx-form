@@ -5,11 +5,12 @@ import {
 	every, forEach, pickBy, some
 } from 'lodash';
 import type { AsyncAction } from '@amalgama/mobx-async-action';
-import Field, { type ValueType } from '../Field';
+import Field from '../Field';
 import type {
 	FormFields, FormParams, FormSubmitAction, FormValues
 } from './types';
 import { valuesOf, wrapInAsyncAction } from './utils';
+import type { ValueType } from '../utils/types';
 
 export default class Form {
 	private fields: FormFields;
