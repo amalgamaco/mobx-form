@@ -24,9 +24,16 @@ Constructs a new field.
 | ---- | ---- | ----------- | ---------------------- | 
 | `label` | `string` | The field's label. | `''` |
 | `hint` | `string` | The field's hint text. | `''` |
-| `value` | `T` | The field's initial value. | Required |
+| `defaultValue` | `T` | The field's default value. | Required |
+| `value` | `T` | The field's initial value. | `defaultValue` |
 | `validators` | `FieldValidator<T>[]` | An array of validators. | `[]` |
 | `disabled` | `boolean` | Whether the field is disabled or not. | `false` |
+
+The difference between `value` and `defaultValue` is that `value` is the initial value that the field will have, and it's the value it will take when you call [`reset`](#reset) on it.
+
+On the other hand, `defaultValue` is the value that the field will have initially if you don't pass any `value`, and the value it will take when you call [`clear`](#clear) on it.
+
+The `value` represents the state of the field and you will pass it to a field's constructor if you are building a form for editing some information, since you typically want to auto-fill the fields with some initial values. The `defaultValue` is generally more related to the *type* of field; for example, [`TextInput`](TextInput.md)'s have the `defaultValue` set to empty string, and [`MultiSelect`](multiSelect.md)'s have it set to an empty array. However, in some situations you may want to override the `defaultValue` because you want the `clear` method to set something specific that makes sense for your app.
 
 ### label
 
@@ -83,6 +90,14 @@ error: string
 ```
 
 Returns the error message being shown. This may or may not equal the error message reported by the current failing validator, if any; this behavior will depend on the particular `Field` subclass.
+
+### clear
+
+```ts
+clear(): void
+```
+
+Clears the value of the field by setting it to the `defaultValue` given in constructor, and also clears any error message that was being shown.
 
 ### reset
 

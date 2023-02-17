@@ -172,13 +172,21 @@ All these steps are performed synchronously, and this essentially protects again
 
 Step 3 is where the form is considered to be submitting, i.e. at that point `isSubmitting` will start returning `true`.
 
+### clear
+
+```ts
+clear(): void
+```
+
+Clears all the fields (calls [`clear`](Field.md#clear)) on each of them).
+
 ### reset
 
 ```ts
 reset(): void
 ```
 
-Resets all the fields (calls `reset` on each of them).
+Resets all the fields (calls [`reset`](Field.md#reset) on each of them).
 
 ### showErrors
 
