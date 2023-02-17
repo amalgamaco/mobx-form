@@ -22,10 +22,20 @@ interface ValidationResult {
 ## Constructor functions
 Two constructor functions are defined for creating `ValidationResult`s easily:
 
-### `valid(): ValidationResult`
+### valid
+
+```ts
+valid(): ValidationResult
+```
+
 Returns `{ isValid: true, error: '' }`.
 
-### `invalid( error: string ): ValidationResult`
+### invalid
+
+```ts
+invalid( error: string ): ValidationResult
+```
+
 Returns `{ isValid: false, error }`.
 
 ## Examples

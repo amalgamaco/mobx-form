@@ -9,6 +9,7 @@ Each validator offered comes with the following:
   - An optional config parameter, which configures things like error message to display. Each validator has a default config but you can override it when creating the validator.
 
 ## Validators
+
 ### `required<T>`
 
 Validates the value is present. For this it evaluates whether `!!value` is `true` or `false`. Its config object consists of a `message` parameter that sets the error to return.

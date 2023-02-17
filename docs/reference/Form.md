@@ -5,7 +5,11 @@ The class for representing forms.
 ## Methods
 The `Form` class has the following methods:
 
-### `constructor( params: FormParams ): Form`
+### constructor
+
+```ts
+constructor( params: FormParams ): Form
+```
 
 Constructs a new form.
 
@@ -20,7 +24,12 @@ Note that the `onSubmit` callback may or may not return a promise, but the form 
 
 This means that, when submitting the form, you can opt to do something synchronously, or asynchronously; the latter is the most common option since a request is usually sent to a web service.
 
-### `values: Record<string, unknown>`
+### values
+
+```ts
+values: Record<string, unknown>
+```
+
 Returns an object where each key is the identifier of a field and the value is the identified field's value. Example:
 
 ```ts
@@ -35,7 +44,12 @@ form.values;
 // returns { first: 'first value', second: 25 } as Record<string, unknown>
 ```  
 
-### `dirtyValues: Record<string, unknown>`
+### dirtyValues
+
+```ts
+dirtyValues: Record<string, unknown>
+```
+
 Same as `values`, but only for the dirty fields, i.e. for the fields whose values have changed from their initial ones.
 
 Following the example above:
@@ -48,15 +62,27 @@ form.dirtyValues; // returns { first: 'Now is dirty' }
 
 This is useful for forms destined to edit/update some information. In these forms you usually provide initial values to the fields, which are obtained from some entity that already exists in the backend. When submitting the form, you want to make a PATCH request to update the entity. A good idea is to only send, in the request body, the properties that actually changed, so that the web service has less work to do. And a quick way of knowing which properties have to be changed, is to ask the form itself with `dirtyValues`.
 
-###  `isValid: boolean`
+### isValid
+
+```ts
+isValid: boolean
+```
 
 Returns `true` if all of the **enabled** form's fields are valid, and `false` otherwise. Disabled fields are ignored.
 
-### `isDirty: boolean`
+### isDirty
+
+```ts
+isDirty: boolean
+```
 
 Returns `true` if at least one field is dirty.
 
-### `isReadyToSubmit: boolean`
+### isReadyToSubmit
+
+```ts
+isReadyToSubmit: boolean
+```
 
 Returns `true` if all the following conditions are true:
 - The form is valid.
@@ -65,7 +91,11 @@ Returns `true` if all the following conditions are true:
 
 The motivation for this method is that it's common for some apps to disable submit buttons as long as one of those conditions is not satisfied. In Amalgama's MobX architecture this logic tends to be repeated in all presenters, so this method, with a not so happy name, tries to facilitate it.
 
-###  `isSubmitting: boolean`
+### isSubmitting
+
+```ts
+isSubmitting: boolean
+```
 
 Returns `true` if `submit()` was called on the form, it called the `onSubmit` callback passed in constructor, and the promise returned by the callback was not resolved nor rejected yet.
 
@@ -73,7 +103,12 @@ For example, if your `onSubmit` makes a request to the WS, returning the corresp
 
 Can be useful for showing loaders at the UI level while the end user waits for the form to be submitted.
 
-### `select<T>( fieldKey: string ): T`
+### select
+
+```ts
+select<T>( fieldKey: string ): T
+```
+
 Returns the field whose key (the identifier it was given when constructing the form) is `fieldKey`, as a field of type `T`. Here `T` must satisfy the constraint of being a `Field<V>` for some `V`. If `T` is not provided, it defaults to `Field<unknown>`.
 
 ```ts
@@ -122,7 +157,12 @@ However there are some drawbacks:
 
 Do what is more convenient and comfortable for you ;)
 
-### `submit(): Promise<void>`
+### submit
+
+```ts
+submit(): Promise<void>
+```
+
 Submits the form. Calling the method will make the form:
 1) Call `syncError` on all of its fields. so that they show any error they have to show in case they are invalid. This way the end user knows exactly what is invalid and what not at the moment of submitting, independent of the types of the fields.
 2) Return a resolved promise if the form is invalid or is already being submitted. In other words, the submit action is ignored.
@@ -132,8 +172,18 @@ All these steps are performed synchronously, and this essentially protects again
 
 Step 3 is where the form is considered to be submitting, i.e. at that point `isSubmitting` will start returning `true`.
 
-### `reset()`
+### reset
+
+```ts
+reset(): void
+```
+
 Resets all the fields (calls `reset` on each of them).
 
-### `showErrors( errors: Record<string, string>)`
+### showErrors
+
+```ts
+showErrors( errors: Record<string, string> ): void
+```
+
 This method is like a shortcut for calling `showError` on each field. Basically, for each key-error pair in the given `errors` object, shows the error message in the field identified by the key. Can be useful if the backend returns errors for each field and they can be directly shown on the form.

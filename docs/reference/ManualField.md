@@ -17,7 +17,12 @@ You could also use it for date pickers. The functionality of choosing a date thr
 ## Methods
 It inherits everything from `Field<T>` and adds the following method.
 
-### `change( newValue: T )`
+### change
+
+```ts
+change( newValue: T ): void
+```
+
 Sets a new value, overwriting the previous one.
 
 The field's error message is immediately synchronized with the entered value:

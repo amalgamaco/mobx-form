@@ -1,7 +1,7 @@
 # Design principles
 
 ## Field classes
-One of the core ideas of the library relies on the fact that forms typically have different types of fields. Each of these offers a particular way of interacting with its instances. Text inputs are just one type of field,  but there are also checkboxes, selects, multi-selects, date pickers, etc.
+One of the core ideas of the library relies on the fact that forms typically have different types of fields. Each of these offers a particular way of interacting with its instances. Text inputs are just one type of field, but there are also checkboxes, selects, multi-selects, date pickers, etc. You could even consider a "profile avatar" selector as a special kind of field.
 
 The idea is to take advantage of object-oriented design to model these interactions. The library provides an abstract `Field` class from which particular field classes can inherit to define their own behavior. The most important and common one provided by the library is `TextInput`.
 
@@ -9,7 +9,7 @@ The `Form` class represents the form itself and is a set of `Field`'s, and provi
 
 The library aims to be extendable to satisfy the need for different types of fields and avoid being an obstacle; this means that if you need a particular type of field which is not yet provided, you can **define your own subclass of `Field`** for it and use it in your forms and integrate its instances however you want with your UI components.
 
-If there are different field classes, then what do they have in common? This is covered in detail in the **Reference** section, but we can briefly enumerate them:
+If there are different field classes, then what do they have in common? This is covered in detail in the [Field](reference/Field.md) section of the [Reference](reference.md), but we can briefly enumerate them:
 - A label.
 - A hint text.
 - A value.
