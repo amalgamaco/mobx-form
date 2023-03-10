@@ -85,7 +85,8 @@ const form = new Form( {
 	},
 	onSubmit: async ( form ) => {
 		// Suppose updatePost is an interactor
-		await updatePost.execute( post.id, form.dirtyValues as PostUpdateParams );
+		const attributesToUpdate = form.dirtyValues as PostUpdateParams;
+		await updatePost.execute( post.id, attributesToUpdate );
 	}
 } );
 ```
