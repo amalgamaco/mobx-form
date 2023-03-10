@@ -1,5 +1,5 @@
-import { makeAutoObservable } from 'mobx';
-import type { FieldStateParams } from './types';
+import { makeAutoObservable, reaction } from 'mobx';
+import type { FieldStateParams, FieldOnChangeCallback } from './types';
 import type Form from '../../Form';
 import type { FieldValidator } from '../../validators';
 
@@ -15,6 +15,7 @@ export default class FieldState<ValueType> {
 	private _value: ValueType;
 	private readonly _initialValue: ValueType;
 	private readonly _validators: FieldValidator<ValueType>[];
+	private readonly _onChange: FieldOnChangeCallback<ValueType>;
 	private _parentForm?: Form;
 
 	constructor( {
@@ -22,7 +23,8 @@ export default class FieldState<ValueType> {
 		defaultValue,
 		value = defaultValue,
 		validators = [],
-		disabled = false
+		disabled = false,
+		onChange = () => undefined
 	}: FieldStateParams<ValueType> ) {
 		this.label = label;
 		this.isDisabled = disabled;
@@ -31,8 +33,11 @@ export default class FieldState<ValueType> {
 		this._value = value;
 		this._initialValue = value;
 		this._validators = validators;
+		this._onChange = onChange;
 
 		makeAutoObservable( this );
+
+		this.setUpOnChangeReaction();
 	}
 
 	get value() {
@@ -69,6 +74,13 @@ export default class FieldState<ValueType> {
 		this._parentForm = form;
 	}
 
+	private setUpOnChangeReaction() {
+		reaction(
+			() => this._value,
+			( newValue: ValueType ) => this._onChange( newValue, this._parentForm )
+		);
+	}
+
 	private get failedValidationResult() {
 		return this.validationResults.find( result => !result.isValid );
 	}
@@ -80,4 +92,4 @@ export default class FieldState<ValueType> {
 	}
 }
 
-export type { FieldStateParams };
+export type { FieldStateParams, FieldOnChangeCallback };

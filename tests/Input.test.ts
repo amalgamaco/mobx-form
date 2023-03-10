@@ -1,6 +1,7 @@
 import Field from '../src/Field';
 import Input, { type InputParams } from '../src/Input';
 import { invalid, valid } from '../src/validators';
+import { itCallsTheOnChangeCallback } from './support/callbacks';
 
 describe( 'Input', () => {
 	const lengthValidator = ( value: string ) => (
@@ -87,6 +88,12 @@ describe( 'Input', () => {
 			input.write( 'new value' );
 
 			expect( input.isFocused ).toBe( true );
+		} );
+
+		itCallsTheOnChangeCallback<Input<string>>( {
+			fieldBuilder: onChange => createInput( { onChange } ),
+			changingAction: ( field, value ) => field.write( value ),
+			sampleValue: 'sample'
 		} );
 	} );
 
