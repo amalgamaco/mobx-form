@@ -102,9 +102,9 @@ The form stores the fields internally in a key-value object and it has no way of
 
 ```ts
 // Returns the 'email' field we described above, as a TextInput
-const email = form.select<TextInput>( 'email' );
+const email = form.field<TextInput>( 'email' );
 // Idem for 'password'
-const password = form.select<TextInput>( 'password' );
+const password = form.field<TextInput>( 'password' );
 ```
 
 ## Rendering a form

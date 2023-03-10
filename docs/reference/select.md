@@ -37,8 +37,7 @@ const form = new Form( {
 	...
 } );
 
-// Be aware, here "select" is the Form method that gets a field!
-const favoriteLanguage = form.select<Select<string>>( 'favoriteLanguage' );
+const favoriteLanguage = form.field<Select<string>>( 'favoriteLanguage' );
 favoriteLanguage.value; // null
 favoriteLanguage.set( 'Ruby' );
 favoriteLanguage.value; // 'Ruby'
