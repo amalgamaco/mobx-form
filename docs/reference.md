@@ -9,3 +9,5 @@ You can find more information about the different parts included in the library 
 - [Input](reference/Input.md)
 - [TextInput](reference/TextInput.md)
 - [ManualField](reference/ManualField.md)
+- [select](reference/select.md)
+- [multiSelect](reference/multiSelect.md)

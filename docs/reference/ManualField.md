@@ -14,12 +14,35 @@ For example, in a checklist you can press any of the options, and depending on w
 
 You could also use it for date pickers. The functionality of choosing a date through the picker is implemented in some component, and then in its `onChange` callback you can update the value of a `ManualField<Date>` that keeps track of the selected date.
 
-## Methods
-It inherits everything from `Field<T>` and adds the following method.
+These examples are so common, that the library already provides the [`select`](./select.md) and [`multiSelect`](multiSelect.md) fields, which are manual fields under the hood but have some facilities for the two examples given above.
 
-### `change( newValue: T )`
+## Methods
+It inherits everything from `Field<T>` and adds the following methods.
+
+### change
+
+```ts
+change( newValue: T ): void
+```
+
 Sets a new value, overwriting the previous one.
 
 The field's error message is immediately synchronized with the entered value:
 - If the value is valid, `error` will start returning `''`.
 - If the value is invalid, `error` will start returning the associated error message.
+
+### set
+
+```ts
+set( newValue: T ): void
+```
+
+Alias of `change`.
+
+### select
+
+```ts
+select( newValue: T ): void
+```
+
+Alias of `change`.
