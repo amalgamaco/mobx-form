@@ -29,6 +29,7 @@ export default abstract class Field<ValueType> {
 			isDirty: computed,
 			error: computed,
 			isDisabled: computed,
+			setIsDisabled: action,
 			clear: action,
 			reset: action,
 			syncError: action,
@@ -59,6 +60,10 @@ export default abstract class Field<ValueType> {
 
 	get isDisabled() {
 		return this._state.isDisabled;
+	}
+
+	setIsDisabled( isDisabled: boolean ) {
+		this._state.setIsDisabled( isDisabled );
 	}
 
 	clear() {
