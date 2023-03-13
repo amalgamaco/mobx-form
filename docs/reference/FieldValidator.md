@@ -46,7 +46,7 @@ const zipCodeValidator = ( value: string, _, label?: string ) => (
 );
 
 const passwordConfirmationValidator = ( value: string, form?: Form ) => (
-	value === form?.select<TextInput>( 'password' ).value
+	value === form?.field<TextInput>( 'password' ).value
 		? valid()
 		: invalid( 'Must match the password you entered' )
 );

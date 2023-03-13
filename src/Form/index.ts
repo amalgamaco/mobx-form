@@ -11,6 +11,7 @@ import type {
 } from './types';
 import { valuesOf, wrapInAsyncAction } from './utils';
 import type { ValueType } from '../utils/types';
+import deprecatedMethod from '../utils/deprecatedMethod';
 
 export default class Form {
 	private fields: FormFields;
@@ -62,8 +63,16 @@ export default class Form {
 		return this.submitAction.isExecuting;
 	}
 
-	select<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
+	field<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
 		return this.fields[ fieldKey ] as FieldType;
+	}
+
+	select<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
+		deprecatedMethod(
+			'Form', 'select', { alternative: 'field', docsPath: '/reference/Form.md#field' }
+		);
+
+		return this.field<FieldType>( fieldKey );
 	}
 
 	async submit() {

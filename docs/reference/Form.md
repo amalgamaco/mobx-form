@@ -56,7 +56,7 @@ Following the example above:
 
 ```ts
 form.dirtyValues; // returns {}
-form.select<TextInput>( 'first' ).write( 'Now is dirty' );
+form.field<TextInput>( 'first' ).write( 'Now is dirty' );
 form.dirtyValues; // returns { first: 'Now is dirty' }
 ```
 
@@ -103,18 +103,18 @@ For example, if your `onSubmit` makes a request to the WS, returning the corresp
 
 Can be useful for showing loaders at the UI level while the end user waits for the form to be submitted.
 
-### select
+### field
 
 ```ts
-select<T>( fieldKey: string ): T
+field<T>( fieldKey: string ): T
 ```
 
 Returns the field whose key (the identifier it was given when constructing the form) is `fieldKey`, as a field of type `T`. Here `T` must satisfy the constraint of being a `Field<V>` for some `V`. If `T` is not provided, it defaults to `Field<unknown>`.
 
 ```ts
-form.select<TextInput>( 'email' ); // Returns the field as a TextInput
-form.select( 'email' ); // Returns the field as a Field<unknown>
-form.select<OtherFieldType>( 'email' ); // Returns the field as an OtherFieldType
+form.field<TextInput>( 'email' ); // Returns the field as a TextInput
+form.field( 'email' ); // Returns the field as a Field<unknown>
+form.field<OtherFieldType>( 'email' ); // Returns the field as an OtherFieldType
 ```
 
 This is currently a limitation, since the form internally stores the fields in a key-value object, and at compile time there is no information about the concrete types of them. Ideally, obtaining a form's field would return something with the expected field type, without requiring any type assertions or other similar workarounds, but it's currently not possible.
@@ -134,11 +134,11 @@ class LoginForm extends Form {
 	}
 
 	get username() {
-		return this.select<TextInput>( 'username' );
+		return this.field<TextInput>( 'username' );
 	}
 
 	get password() {
-		return this.select<TextInput>( 'password' );
+		return this.field<TextInput>( 'password' );
 	}
 
 	get values() {
@@ -156,6 +156,14 @@ However there are some drawbacks:
 - Care must be taken when overriding `values` and `dirtyValues`, since they are MobX computeds. An alternative, perhaps even better, is to use composition over inheritance, e.g. `LoginForm` would internally store the `Form` instance. You would need to delegate all `Form` getters and methods though.
 
 Do what is more convenient and comfortable for you ;)
+
+### select (deprecated)
+
+```ts
+select<T>( fieldKey: string ): T
+```
+
+Alias of `field`.
 
 ### submit
 

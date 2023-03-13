@@ -11,7 +11,7 @@ describe( 'Form', () => {
 		value.length >= 8 ? valid() : invalid( 'At least eight chars.' )
 	);
 	const matchPassword = ( value: string, form?: Form ) => (
-		value === form?.select( 'password' ).value ? valid() : invalid( 'Password does not match' )
+		value === form?.field( 'password' ).value ? valid() : invalid( 'Password does not match' )
 	);
 
 	const fields = {
@@ -68,8 +68,8 @@ describe( 'Form', () => {
 	const createFormAndMakeItValid = ( params?: Partial<FormParams> ) => {
 		const form = createForm( params );
 
-		form.select<TestField>( 'password' ).change( 'validpass' );
-		form.select<TestField>( 'passwordConfirmation' ).change( 'validpass' );
+		form.field<TestField>( 'password' ).change( 'validpass' );
+		form.field<TestField>( 'passwordConfirmation' ).change( 'validpass' );
 
 		return form;
 	};
@@ -78,14 +78,14 @@ describe( 'Form', () => {
 		it( 'clears the error message of each field', () => {
 			const form = createForm();
 
-			form.select<TestField>( 'email' ).change( '' );
-			form.select<TestField>( 'password' ).change( '' );
+			form.field<TestField>( 'email' ).change( '' );
+			form.field<TestField>( 'password' ).change( '' );
 			form.submit();
 
 			action( form );
 
 			[ 'email', 'password', 'passwordConfirmation', 'document', 'admin' ].forEach( ( key ) => {
-				expect( form.select( key ).error ).toEqual( '' );
+				expect( form.field( key ).error ).toEqual( '' );
 			} );
 		} );
 	};
@@ -119,8 +119,8 @@ describe( 'Form', () => {
 			it( 'returns the values of the dirty fields', () => {
 				const form = createForm();
 
-				form.select<TestField>( 'email' ).change( 'new@test.com' );
-				form.select<ManualField<boolean>>( 'admin' ).change( false );
+				form.field<TestField>( 'email' ).change( 'new@test.com' );
+				form.field<ManualField<boolean>>( 'admin' ).change( false );
 
 				expect( form.dirtyValues ).toEqual( {
 					email: 'new@test.com',
@@ -134,7 +134,7 @@ describe( 'Form', () => {
 		describe( 'when all fields are valid', () => {
 			it( 'returns true', () => {
 				const form = createFormAndMakeItValid();
-				form.select<TestField>( 'document' ).change( 'validdoc' );
+				form.field<TestField>( 'document' ).change( 'validdoc' );
 
 				expect( form.isValid ).toBe( true );
 			} );
@@ -152,7 +152,7 @@ describe( 'Form', () => {
 			it( 'returns false', () => {
 				const form = createFormAndMakeItValid();
 
-				form.select<TestField>( 'passwordConfirmation' ).change( 'is not the password' );
+				form.field<TestField>( 'passwordConfirmation' ).change( 'is not the password' );
 
 				expect( form.isValid ).toBe( false );
 			} );
@@ -172,7 +172,7 @@ describe( 'Form', () => {
 			it( 'returns true', () => {
 				const form = createForm();
 
-				form.select<TestField>( 'password' ).change( 'sekret' );
+				form.field<TestField>( 'password' ).change( 'sekret' );
 
 				expect( form.isDirty ).toBe( true );
 			} );
@@ -219,6 +219,18 @@ describe( 'Form', () => {
 		} );
 	} );
 
+	describe( '@field', () => {
+		it( 'returns the field that has the given key', () => {
+			const form = createForm();
+
+			const documentField = form.field<TestField>( 'document' );
+
+			expect( documentField.label ).toEqual( 'Document' );
+			expect( documentField.value ).toEqual( 'unused' );
+			expect( documentField.isDisabled ).toBe( true );
+		} );
+	} );
+
 	describe( '@select', () => {
 		it( 'returns the field that has the given key', () => {
 			const form = createForm();
@@ -234,8 +246,8 @@ describe( 'Form', () => {
 	describe( '@submit', () => {
 		it( 'syncronizes the errors of all fields', () => {
 			const form = createFormAndMakeItValid();
-			const email = form.select<TestField>( 'email' );
-			const password = form.select<TestField>( 'password' );
+			const email = form.field<TestField>( 'email' );
+			const password = form.field<TestField>( 'password' );
 			email.change( '' );
 			email.syncError();
 			email.change( 'valid@again.com' );
@@ -358,8 +370,8 @@ describe( 'Form', () => {
 		it( 'resets the value of each field', () => {
 			const form = createForm();
 
-			form.select<TestField>( 'email' ).change( 'dirty@test.com' );
-			form.select<TestField>( 'password' ).change( 'dirty' );
+			form.field<TestField>( 'email' ).change( 'dirty@test.com' );
+			form.field<TestField>( 'password' ).change( 'dirty' );
 			form.reset();
 
 			expect( form.values ).toEqual( {
@@ -387,8 +399,8 @@ describe( 'Form', () => {
 				document: 'This document failed the external validation'
 			} );
 
-			expect( form.select( 'email' ).error ).toEqual( errors.email );
-			expect( form.select( 'document' ).error ).toEqual( errors.document );
+			expect( form.field( 'email' ).error ).toEqual( errors.email );
+			expect( form.field( 'document' ).error ).toEqual( errors.document );
 		} );
 
 		it( 'ignores errors for fields that do not exist', () => {

@@ -34,7 +34,7 @@ const form = new Form( {
 	...
 } );
 
-const interests = form.select<MultiSelect<string>>( 'interests' );
+const interests = form.field<MultiSelect<string>>( 'interests' );
 interests.value; // []
 interests.set( [ 'music', 'sports' ] );
 interests.value; // [ 'music', 'sports' ]
