@@ -135,9 +135,13 @@ Here, `TextInput` would be some component in your app which renders a text input
 
 You can quickly see that rendering your `TextInput` like that for each field you have would be quite tedious. That's why it is a good idea to define a hook or something that, given a particular type of field, returns all the props necessary for your UI component that corresponds to that type of field, ready to be passed in a single line with the spread notation `...` .
 
-## Triggering side effects when fields change
+## Triggering side effects when interacting with fields
 
-If you want your form's fields to trigger custom side effects when they are changed, just pass an `onChange` callback when constructing them:
+If you want your form's fields to trigger custom side effects when you perform actions on them, you can use a set of callbacks that you associate to these actions.
+
+### onChange
+
+One of these actions is changing the value of a field. Each particular type of field offers its own way of changing the inner value, but the fact is that it eventually changes. You can pass an `onChange` callback when constructing a field so that, when the value changes, the callback gets executed:
 
 ```ts
 const form = new Form( {
@@ -174,6 +178,25 @@ const form = new Form( {
 				}
 			}
 		} )
+	}
+} );
+```
+
+### onFocus and onBlur
+
+For the particular case of inputs, you can trigger side effects when focusing and blurring them, with the callbacks `onFocus` and `onBlur` respectively. These callbacks accept the `Form` instance as parameter.
+
+For example, you could have a "city" field that is just a text input, but your app may show suggestions in a dropdown when the input is focused. It could look something like this:
+
+```ts
+const form = new Form( {
+	fields: {
+		city: textInput( {
+			label: 'City',
+			onFocus: () => logicForShowingCitySuggestions(),
+			onBlur: () => logicForHidingCitySuggestions()
+		} ),
+		...
 	}
 } );
 ```

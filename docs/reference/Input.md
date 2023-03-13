@@ -1,13 +1,13 @@
 # Input
 
-Base class for inputs. Inherits from `Field<T>`. This input class still accepts an arbitrary type `T` for its value, which means you can have `Input<number>` apart from `Input<string>` if it's suitable for you.
+Base class for inputs. Inherits from [`Field<T>`](./Field.md). This input class still accepts an arbitrary type `T` for its value, which means you can have `Input<number>` apart from `Input<string>` if it's suitable for you.
 
 ```ts
 class Input<T>
 ```
 
 ## Methods
-It inherits everything from `Field<T>` and adds the following properties and methods.
+It inherits everything from [`Field<T>`](./Field.md) and adds the following properties and methods.
 
 ### constructor
 
@@ -19,12 +19,14 @@ Constructs a new input.
 
 **Parameters**
 
-Every parameter accepted by `Field<T>`'s constructor, plus:
+Every parameter accepted by [`Field<T>`'s constructor](./Field.md#constructor), plus:
 
 | Name | Type | Description | Required/Default |
 | ---- | ---- | ----------- | ---------------------- | 
 | `placeholder` | `string` | The input's placeholder. | `''` |
 | `showErrors` | `'onWrite' \| 'onBlur' \| 'onSubmit'` | Error-display behavior. | `'onBlur'` |
+| `onFocus` | `( form?: Form ) => void` | Callback to execute when input is focused. | `() => undefined` |
+| `onBlur` | `( form?: Form ) => void` | Callback to execute when input is blurred. | `() => undefined` |
 
 The input will show and hide errors according to the `showErrors` parameter, that can take the following values:
 - `onWrite`: displayed error message is always synchronized with the current input's value. It shows and hides errors as the end user writes on the input. The only exception occurs at the beginning, when nothing was written yet; no error will be displayed at that moment until something is actually written.
@@ -53,7 +55,7 @@ Returns whether the input is focused or not.
 focus(): void
 ```
 
-Focuses the input.
+Focuses the input. This executes the `onFocus` callback passing the parent form as parameter, if the input was not previously focused.
 
 ### write
 
@@ -71,4 +73,4 @@ This method will focus the input if it was not already focused, and may change t
 blur(): void
 ```
 
-Blurs the input. This method may change the displayed error message according to the configuration given in constructor.
+Blurs the input. This method may change the displayed error message according to the configuration given in constructor. It also executes the `onBlur` callback passing the parent form as parameter, if the input was previously focused.

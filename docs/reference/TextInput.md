@@ -1,6 +1,6 @@
 # TextInput
 
-The most common type of field. A `TextInput` is just an `Input<string>`. These are the only differences:
+The most common type of field. A `TextInput` is just an [`Input<string>`](./Input.md). These are the only differences:
 - The `defaultValue` parameter in the constructor is optional, and if it's not provided, it will default to an empty string.
 - To avoid typing `new TextInput` for creating the inputs and passing them to the form constructor, a simple `textInput` function is provided which directly creates a `TextInput` for you with the parameters you pass to it, which are exactly the ones expected by the constructor.
 
