@@ -1,5 +1,7 @@
 # Getting started
 
+[[_TOC_]]
+
 ## Creating a form
 If you need a form in your app, then just create an instance of `Form` with the fields you need. For example, this creates a sign up form with two text inputs, `email` and `password`, and performs the sign up on submit:
 
@@ -197,6 +199,41 @@ const form = new Form( {
 			onBlur: () => logicForHidingCitySuggestions()
 		} ),
 		...
+	}
+} );
+```
+
+## Tweaking global configuration
+
+There are some configuration options that affect multiple parts of the library; their primary purpose is to provide default values for several optional parameters like error messages for field validators and error-display behaviour for inputs.
+
+If you want to change the default validation messages across your app, and, for example, you want all of your inputs to display their error messages only when the form is submitted (by default) then you can easily achieve this by tweaking the global `config` object (typically in some module initialization):
+
+```ts
+import { config } from '@amalgama/mobx-form';
+
+// Change the default error-display behaviour for inputs
+config.inputs.showErrors = 'onSubmit';
+
+// Change several error messages
+config.validators.email.message = 'The email is not valid';
+config.validators.maxLength.message = 'Cannot type more than :length characters';
+config.validators.required.message = 'This field is required';
+```
+
+You can also use the function `configure` that lets you specify only the options you want to override in a single object. This is how you would use it to change the same options from above:
+
+```ts
+import { configure } from '@amalgama/mobx-form';
+
+configure( {
+	inputs: {
+		showErrors: 'onSubmit';
+	},
+	validators: {
+		email: { message: 'The email is not valid' },
+		maxLength: { message: 'Cannot type more than :length characters' },
+		required: { message: 'This field is required' },
 	}
 } );
 ```

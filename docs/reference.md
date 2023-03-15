@@ -11,3 +11,4 @@ You can find more information about the different parts included in the library 
 - [ManualField](reference/ManualField.md)
 - [select](reference/select.md)
 - [multiSelect](reference/multiSelect.md)
+- [Configuration](reference/configuration.md)

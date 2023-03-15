@@ -1,3 +1,6 @@
+export {
+	default as config, configure, type Config, type ConfigOptions
+} from './config';
 export { default as Field, type FieldParams, type FieldOnChangeCallback } from './Field';
 export {
 	default as Input,
