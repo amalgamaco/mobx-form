@@ -13,7 +13,7 @@ export default class FieldState<ValueType> {
 	private readonly _defaultValue: ValueType;
 	private readonly _initialValue: ValueType;
 	private readonly _validators: FieldValidator<ValueType>[];
-	private readonly _onChange: FieldOnChangeCallback<ValueType>;
+	private readonly _onChange?: FieldOnChangeCallback<ValueType>;
 
 	private _value: ValueType;
 	private _isDisabled: boolean;
@@ -25,7 +25,7 @@ export default class FieldState<ValueType> {
 		value = defaultValue,
 		validators = [],
 		disabled = false,
-		onChange = () => undefined
+		onChange = undefined
 	}: FieldStateParams<ValueType> ) {
 		this.label = label;
 
@@ -91,7 +91,7 @@ export default class FieldState<ValueType> {
 	private setUpOnChangeReaction() {
 		reaction(
 			() => this._value,
-			( newValue: ValueType ) => this._onChange( newValue, this._parentForm )
+			( newValue: ValueType ) => this._onChange?.( newValue, this._parentForm )
 		);
 	}
 

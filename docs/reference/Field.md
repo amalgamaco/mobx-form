@@ -28,7 +28,7 @@ Constructs a new field.
 | `value` | `T` | The field's initial value. | `defaultValue` |
 | `validators` | `FieldValidator<T>[]` | An array of validators. | `[]` |
 | `disabled` | `boolean` | Whether the field is disabled or not. | `false` |
-| `onChange` | `FieldOnChangeCallback<T>` | Callback to execute when value changes. | `() => undefined` |
+| `onChange` | `FieldOnChangeCallback<T> | undefined` | Callback to execute when value changes. | `undefined` |
 
 #### `value` and `defaultValue`
 
@@ -40,7 +40,7 @@ The `value` represents the state of the field and you will pass it to a field's 
 
 #### The `onChange` callback
 
-This callback is of type `FieldOnChangeCallback<T>` which is defined as:
+This callback, when present, is of type `FieldOnChangeCallback<T>` which is defined as:
 
 ```ts
 type FieldOnChangeCallback<T> = ( newValue: T, parentForm?: Form ) => void;
