@@ -1,6 +1,7 @@
 import {
 	action, computed, makeObservable, observable, reaction
 } from 'mobx';
+import config from '../config';
 import Field from '../Field';
 import type { InputCallback, InputErrorDisplayConfig, InputParams } from './types';
 
@@ -15,7 +16,7 @@ export default class Input<ValueType> extends Field<ValueType> {
 
 	constructor( {
 		placeholder = '',
-		showErrors = 'onBlur',
+		showErrors = config.inputs.showErrors,
 		onFocus = () => undefined,
 		onBlur = () => undefined,
 		...fieldParams
