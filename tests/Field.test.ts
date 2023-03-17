@@ -14,7 +14,6 @@ describe( 'Field', () => {
 	const lengthValidator = ( value: string ) => (
 		value.length <= 7 ? valid() : invalid( 'Too long!' )
 	);
-	const disabled = false;
 
 	const createField = ( params?: Partial<FieldParams<string>> ) => new TestField( {
 		label,
@@ -22,7 +21,7 @@ describe( 'Field', () => {
 		defaultValue,
 		value: initialValue,
 		validators: [ presenceValidator, lengthValidator ],
-		disabled,
+		disabled: false,
 		...params
 	} );
 
@@ -33,7 +32,11 @@ describe( 'Field', () => {
 			expect( field.label ).toEqual( label );
 			expect( field.hint ).toEqual( hint );
 			expect( field.value ).toEqual( initialValue );
-			expect( field.isDisabled ).toEqual( disabled );
+			expect( field.isDisabled ).toEqual( false );
+
+			const disabledField = createField( { disabled: true } );
+
+			expect( disabledField.isDisabled ).toEqual( true );
 		} );
 
 		describe( 'without label, hint and disabled attributes', () => {
@@ -110,6 +113,28 @@ describe( 'Field', () => {
 
 					expect( field.isDirty ).toBe( false );
 				} );
+			} );
+		} );
+	} );
+
+	describe( '@setIsDisabled', () => {
+		describe( 'when called with false', () => {
+			it( 'sets the field as enabled', () => {
+				const field = createField( { disabled: true } );
+
+				field.setIsDisabled( false );
+
+				expect( field.isDisabled ).toBe( false );
+			} );
+		} );
+
+		describe( 'when called with true', () => {
+			it( 'sets the field as disabled', () => {
+				const field = createField( { disabled: false } );
+
+				field.setIsDisabled( true );
+
+				expect( field.isDisabled ).toBe( true );
 			} );
 		} );
 	} );

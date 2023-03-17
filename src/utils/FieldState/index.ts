@@ -9,13 +9,14 @@ const fieldAlreadyAttachedError = ( label: string ) => new Error(
 
 export default class FieldState<ValueType> {
 	readonly label: string;
-	readonly isDisabled: boolean;
 
 	private readonly _defaultValue: ValueType;
-	private _value: ValueType;
 	private readonly _initialValue: ValueType;
 	private readonly _validators: FieldValidator<ValueType>[];
 	private readonly _onChange: FieldOnChangeCallback<ValueType>;
+
+	private _value: ValueType;
+	private _isDisabled: boolean;
 	private _parentForm?: Form;
 
 	constructor( {
@@ -27,13 +28,14 @@ export default class FieldState<ValueType> {
 		onChange = () => undefined
 	}: FieldStateParams<ValueType> ) {
 		this.label = label;
-		this.isDisabled = disabled;
 
 		this._defaultValue = defaultValue;
-		this._value = value;
 		this._initialValue = value;
 		this._validators = validators;
 		this._onChange = onChange;
+
+		this._value = value;
+		this._isDisabled = disabled;
 
 		makeAutoObservable( this );
 
@@ -52,12 +54,20 @@ export default class FieldState<ValueType> {
 		return this._value !== this._initialValue;
 	}
 
+	get isDisabled() {
+		return this._isDisabled;
+	}
+
 	get error() {
 		return this.failedValidationResult?.error;
 	}
 
 	setValue( newValue: ValueType ) {
 		this._value = newValue;
+	}
+
+	setIsDisabled( isDisabled: boolean ) {
+		this._isDisabled = isDisabled;
 	}
 
 	clear() {

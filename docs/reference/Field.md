@@ -106,6 +106,14 @@ error: string
 
 Returns the error message being shown. This may or may not equal the error message reported by the current failing validator, if any; this behavior will depend on the particular `Field` subclass.
 
+### setIsDisabled
+
+```ts
+setIsDisabled( isDisabled: boolean ): void
+```
+
+Sets whether the field is disabled or not.
+
 ### clear
 
 ```ts
