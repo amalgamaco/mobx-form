@@ -62,6 +62,10 @@ export default class FieldState<ValueType> {
 		return this.failedValidationResult?.error;
 	}
 
+	get parentForm() {
+		return this._parentForm;
+	}
+
 	setValue( newValue: ValueType ) {
 		this._value = newValue;
 	}

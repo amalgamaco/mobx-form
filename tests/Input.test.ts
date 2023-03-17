@@ -1,4 +1,5 @@
 import Field from '../src/Field';
+import Form from '../src/Form';
 import Input, { type InputParams } from '../src/Input';
 import { invalid, valid } from '../src/validators';
 import { itCallsTheOnChangeCallback } from './support/callbacks';
@@ -19,6 +20,13 @@ describe( 'Input', () => {
 		showErrors: 'onWrite',
 		...params
 	} );
+
+	const createInputWithForm = ( params?: Partial<InputParams<string>> ) => {
+		const input = createInput( params );
+		const form = new Form( { fields: { input } } );
+
+		return { input, form };
+	};
 
 	it( 'is a Field', () => {
 		const input = createInput();
@@ -59,6 +67,19 @@ describe( 'Input', () => {
 
 				expect( input.isFocused ).toBe( true );
 			} );
+
+			describe( 'when the input has an onFocus callback', () => {
+				const onFocus = jest.fn();
+
+				it( 'calls it passing the parent form as parameter', () => {
+					const { input, form } = createInputWithForm( { onFocus } );
+
+					input.focus();
+
+					expect( onFocus ).toHaveBeenCalledWith( form );
+					expect( onFocus ).toHaveBeenCalledTimes( 1 );
+				} );
+			} );
 		} );
 
 		describe( 'when the input is focused', () => {
@@ -69,6 +90,19 @@ describe( 'Input', () => {
 				input.focus();
 
 				expect( input.isFocused ).toBe( true );
+			} );
+
+			describe( 'when the input has an onFocus callback', () => {
+				const onFocus = jest.fn();
+
+				it( 'doesn\'t execute it', () => {
+					const { input } = createInputWithForm( { onFocus } );
+
+					input.focus();
+					input.focus();
+
+					expect( onFocus ).toHaveBeenCalledTimes( 1 );
+				} );
 			} );
 		} );
 	} );
@@ -106,6 +140,18 @@ describe( 'Input', () => {
 
 				expect( input.isFocused ).toBe( false );
 			} );
+
+			describe( 'when the input has an onBlur callback', () => {
+				const onBlur = jest.fn();
+
+				it( 'doesn\'t execute it', () => {
+					const { input } = createInputWithForm( { onBlur } );
+
+					input.blur();
+
+					expect( onBlur ).not.toHaveBeenCalled();
+				} );
+			} );
 		} );
 
 		describe( 'when the input is focused', () => {
@@ -116,6 +162,20 @@ describe( 'Input', () => {
 				input.blur();
 
 				expect( input.isFocused ).toBe( false );
+			} );
+
+			describe( 'when the input has an onBlur callback', () => {
+				const onBlur = jest.fn();
+
+				it( 'calls it passing the parent form as parameter', () => {
+					const { input, form } = createInputWithForm( { onBlur } );
+
+					input.focus();
+					input.blur();
+
+					expect( onBlur ).toHaveBeenCalledWith( form );
+					expect( onBlur ).toHaveBeenCalledTimes( 1 );
+				} );
 			} );
 		} );
 	} );

@@ -1,23 +1,33 @@
 import {
-	action, computed, makeObservable, observable
+	action, computed, makeObservable, observable, reaction
 } from 'mobx';
 import Field from '../Field';
-import type { InputErrorDisplayConfig, InputParams } from './types';
+import type { InputCallback, InputErrorDisplayConfig, InputParams } from './types';
 
 export default class Input<ValueType> extends Field<ValueType> {
 	readonly placeholder: string;
+
 	protected readonly showErrors: InputErrorDisplayConfig;
+	protected readonly onFocus: InputCallback;
+	protected readonly onBlur: InputCallback;
+
 	protected _isFocused: boolean;
 
 	constructor( {
 		placeholder = '',
 		showErrors = 'onBlur',
+		onFocus = () => undefined,
+		onBlur = () => undefined,
 		...fieldParams
 	}: InputParams<ValueType> ) {
 		super( fieldParams );
 
 		this.placeholder = placeholder;
+
 		this.showErrors = showErrors;
+		this.onFocus = onFocus;
+		this.onBlur = onBlur;
+
 		this._isFocused = false;
 
 		makeObservable<Input<ValueType>, '_isFocused'>( this, {
@@ -27,6 +37,8 @@ export default class Input<ValueType> extends Field<ValueType> {
 			write: action,
 			blur: action
 		} );
+
+		this.setUpFocusReaction();
 	}
 
 	get isFocused() {
@@ -47,6 +59,20 @@ export default class Input<ValueType> extends Field<ValueType> {
 		this._isFocused = false;
 		if ( this.showErrors === 'onBlur' ) this.syncError();
 	}
+
+	protected setUpFocusReaction() {
+		reaction(
+			() => this.isFocused,
+			( isFocused ) => {
+				const callback = isFocused ? this.onFocus : this.onBlur;
+				callback( this.parentForm );
+			}
+		);
+	}
+
+	protected get parentForm() {
+		return this._state.parentForm;
+	}
 }
 
-export type { InputParams };
+export type { InputCallback, InputErrorDisplayConfig, InputParams };
