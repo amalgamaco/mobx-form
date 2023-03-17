@@ -28,12 +28,27 @@ Constructs a new field.
 | `value` | `T` | The field's initial value. | `defaultValue` |
 | `validators` | `FieldValidator<T>[]` | An array of validators. | `[]` |
 | `disabled` | `boolean` | Whether the field is disabled or not. | `false` |
+| `onChange` | `FieldOnChangeCallback<T>` | Callback to execute when value changes. | `() => undefined` |
+
+#### `value` and `defaultValue`
 
 The difference between `value` and `defaultValue` is that `value` is the initial value that the field will have, and it's the value it will take when you call [`reset`](#reset) on it.
 
 On the other hand, `defaultValue` is the value that the field will have initially if you don't pass any `value`, and the value it will take when you call [`clear`](#clear) on it.
 
 The `value` represents the state of the field and you will pass it to a field's constructor if you are building a form for editing some information, since you typically want to auto-fill the fields with some initial values. The `defaultValue` is generally more related to the *type* of field; for example, [`TextInput`](TextInput.md)'s have the `defaultValue` set to empty string, and [`MultiSelect`](multiSelect.md)'s have it set to an empty array. However, in some situations you may want to override the `defaultValue` because you want the `clear` method to set something specific that makes sense for your app.
+
+#### The `onChange` callback
+
+This callback is of type `FieldOnChangeCallback<T>` which is defined as:
+
+```ts
+type FieldOnChangeCallback<T> = ( newValue: T, parentForm?: Form ) => void;
+```
+
+It is called whenever the `value` of the field changes, i.e. when it is updated with a new value which is actually different from the previous one.
+
+It receives the new value and the form to which the field is attached.
 
 ### label
 

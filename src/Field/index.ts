@@ -93,3 +93,4 @@ export default abstract class Field<ValueType> {
 }
 
 export type { FieldParams };
+export type { FieldOnChangeCallback } from '../utils/FieldState';

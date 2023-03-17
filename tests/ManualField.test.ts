@@ -1,16 +1,17 @@
-import Field from '../src/Field';
+import Field, { type FieldParams } from '../src/Field';
 import ManualField from '../src/ManualField';
 import { invalid, valid } from '../src/validators';
+import { itCallsTheOnChangeCallback } from './support/callbacks';
 
 describe( 'ManualField', () => {
 	const after2021 = ( value: Date ) => (
 		value.getFullYear() > 2021 ? valid() : invalid( 'Date is invalid' )
 	);
-
-	const createField = () => new ManualField<Date>( {
+	const createField = ( params?: Partial<FieldParams<Date>> ) => new ManualField<Date>( {
 		defaultValue: new Date(),
 		value: new Date( 2022, 10, 10 ),
-		validators: [ after2021 ]
+		validators: [ after2021 ],
+		...params
 	} );
 
 	const itChangesTheFieldValue = (
@@ -40,6 +41,12 @@ describe( 'ManualField', () => {
 			changingAction( field, new Date( 2022, 0, 1 ) );
 
 			expect( field.error ).toEqual( '' );
+		} );
+
+		itCallsTheOnChangeCallback<ManualField<Date>>( {
+			fieldBuilder: onChange => createField( { onChange } ),
+			changingAction,
+			sampleValue: new Date()
 		} );
 	};
 

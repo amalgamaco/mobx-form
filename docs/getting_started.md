@@ -107,6 +107,8 @@ const email = form.field<TextInput>( 'email' );
 const password = form.field<TextInput>( 'password' );
 ```
 
+And then you can ask the field for its `value`, `error`, whether it `isValid`, `isDirty`, `isDisabled`, etc. You can find more information in the [Field](reference/Field.md) section of the reference.
+
 ## Rendering a form
 Ok, we have a form and we have its fields. How do we actually show them in the UI? By rendering your form components with props that use those fields and the form itself. Remember that the created form and fields are observable in MobX terms, so if your components are wrapped with the `observer` decorator from `mobx-react-lite` package, then they will be re-rendered with changes that occur in the form and any of its fields.
 
@@ -132,3 +134,46 @@ Here, `TextInput` would be some component in your app which renders a text input
 **IMPORTANT**: for inputs, like in the example, **you must always focus and blur it when the input component itself is focused or blurred**. If you forget this then the error messages triggered by the validators won't be properly shown, since the logic behind showing or hiding them relies on the input being focused and blurred.
 
 You can quickly see that rendering your `TextInput` like that for each field you have would be quite tedious. That's why it is a good idea to define a hook or something that, given a particular type of field, returns all the props necessary for your UI component that corresponds to that type of field, ready to be passed in a single line with the spread notation `...` .
+
+## Triggering side effects when fields change
+
+If you want your form's fields to trigger custom side effects when they are changed, just pass an `onChange` callback when constructing them:
+
+```ts
+const form = new Form( {
+	fields: {
+		title: textInput( {
+			label: 'Title',
+			validators: [ required(), maxLength( 30 ) ],
+			onChange: () => console.log( 'Title changed!' )
+		} ),
+		...
+	}
+} );
+
+const title = form.field<TextInput>( 'title' );
+title.write( 'Special title' ); // Logs 'Title changed!'
+```
+
+In the callback, you can receive both the new value and the form itself if you need. This brings the possibility of implementing very specific and custom behaviour for your forms in an elegant way. For instance, here is a somewhat strange example in which we want the title of a post to be prepended with `'Private - '` when the user selects private visibility.
+
+```ts
+const form = new Form( {
+	fields: {
+		title: textInput( {
+			label: 'Title',
+			validators: [ required(), maxLength( 30 ) ]
+		} ),
+		visibility: select( {
+			label: 'Visibility',
+			validators: [ required() ],
+			onChange: ( newVisibility, form ) => {
+				if ( newVisibility === 'private' ) {
+					const title = form?.field<TextInput>( 'title' );
+					title?.write( `Private - ${title.value}` );
+				}
+			}
+		} )
+	}
+} );
+```
