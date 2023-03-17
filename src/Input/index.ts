@@ -9,16 +9,16 @@ export default class Input<ValueType> extends Field<ValueType> {
 	readonly placeholder: string;
 
 	protected readonly showErrors: InputErrorDisplayConfig;
-	protected readonly onFocus: InputCallback;
-	protected readonly onBlur: InputCallback;
+	protected readonly onFocus?: InputCallback;
+	protected readonly onBlur?: InputCallback;
 
 	protected _isFocused: boolean;
 
 	constructor( {
 		placeholder = '',
 		showErrors = config.inputs.showErrors,
-		onFocus = () => undefined,
-		onBlur = () => undefined,
+		onFocus = undefined,
+		onBlur = undefined,
 		...fieldParams
 	}: InputParams<ValueType> ) {
 		super( fieldParams );
@@ -66,7 +66,7 @@ export default class Input<ValueType> extends Field<ValueType> {
 			() => this.isFocused,
 			( isFocused ) => {
 				const callback = isFocused ? this.onFocus : this.onBlur;
-				callback( this.parentForm );
+				callback?.( this.parentForm );
 			}
 		);
 	}

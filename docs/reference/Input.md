@@ -25,13 +25,23 @@ Every parameter accepted by [`Field<T>`'s constructor](./Field.md#constructor), 
 | ---- | ---- | ----------- | ---------------------- | 
 | `placeholder` | `string` | The input's placeholder. | `''` |
 | `showErrors` | `'onWrite' \| 'onBlur' \| 'onSubmit'` | Error-display behavior. | `'onBlur'` |
-| `onFocus` | `( form?: Form ) => void` | Callback to execute when input is focused. | `() => undefined` |
-| `onBlur` | `( form?: Form ) => void` | Callback to execute when input is blurred. | `() => undefined` |
+| `onFocus` | `InputCallback | undefined` | Callback to execute when input is focused. | `undefined` |
+| `onBlur` | `InputCallback | undefined` | Callback to execute when input is blurred. | `undefined` |
+
+#### The `showErrors` parameter
 
 The input will show and hide errors according to the `showErrors` parameter, that can take the following values:
 - `onWrite`: displayed error message is always synchronized with the current input's value. It shows and hides errors as the end user writes on the input. The only exception occurs at the beginning, when nothing was written yet; no error will be displayed at that moment until something is actually written.
 - `onBlur`: when the input becomes invalid, no error message will be shown until the input is blurred. Once it is blurred, the message will be displayed until a valid value is written again, in which case the error message will be gone immediately, without the need of blurring the input again. The idea behind this is to let the end user know as soon as possible that he/she has "fixed" the invalidity of the field.
 - `onSubmit`: the displayed error message won't change at all. It will only be updated by the form itself when it is submitted. However, if an error is being shown, the behavior of "hide it as soon as the input is valid again" provided by the `onBlur` config is also true for `onSubmit`.
+
+#### `onFocus` and `onBlur` callbacks
+
+These callbacks, when present, are of type `InputCallback` which is defined as:
+
+```ts
+type InputCallback = ( form?: Form ) => void
+```
 
 ### placeholder
 
