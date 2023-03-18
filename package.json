@@ -9,7 +9,9 @@
 	],
 	"scripts": {
 		"build": "tsc",
-		"lint": "eslint src/ tests/",
+		"check-types": "tsc --noEmit",
+		"eslint": "eslint src/ tests/",
+		"lint": "yarn run check-types && yarn run eslint",
 		"test": "JEST_JUNIT_OUTPUT_DIR=reports jest",
 		"release": "release-it"
 	},
