@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const DOCS_BASE_URL = 'https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/blob/main/docs';
+const DOCS_BASE_URL = 'https://github.com/amalgamaco/mobx-form/blob/main/docs';
 
 function docsUrl( path: string ) {
 	return DOCS_BASE_URL + path;

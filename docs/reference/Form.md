@@ -89,7 +89,7 @@ Returns `true` if all the following conditions are true:
 - The form is dirty.
 - The form is not being submitted.
 
-The motivation for this method is that it's common for some apps to disable submit buttons as long as one of those conditions is not satisfied. In Amalgama's MobX architecture this logic tends to be repeated in all presenters, so this method, with a not so happy name, tries to facilitate it.
+The motivation for this method is that it's common for some apps to disable submit buttons as long as one of those conditions is not satisfied. This method handles them all and avoids repeating the same logic across all forms.
 
 ### isSubmitting
 

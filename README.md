@@ -10,7 +10,7 @@ It gives you a [Form](docs/reference/Form.md) class and classes for different ty
 Run the following command to add the `MobX Form` library to your project:
 
 ```bash
-yarn add @amalgama/mobx-form
+yarn add @amalgamaco/mobx-form
 ```
 
 ## Getting started
@@ -18,4 +18,3 @@ yarn add @amalgama/mobx-form
 If you want to take a quick look at how this library is used then you can go ahead with the [Getting started](docs/getting_started.md) section. Apart from that:
 - The [Design principles](docs/design_principles.md) section covers the core ideas behind this library and how it is meant to be used.
 - The [Reference](docs/reference.md) section provides details about available classes, methods, parameters, etc.
-- The [Contributing](docs/contributing.md) section talks about how you can contribute to the project.
