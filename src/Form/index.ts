@@ -4,7 +4,6 @@ import {
 import {
 	every, forEach, pickBy, some
 } from 'lodash';
-import type { AsyncAction } from '@amalgama/mobx-async-action';
 import Field from '../Field';
 import type {
 	FormFields, FormParams, FormSubmitAction, FormValues
@@ -15,11 +14,13 @@ import deprecatedMethod from '../utils/deprecatedMethod';
 
 export default class Form {
 	private fields: FormFields;
-	private submitAction: AsyncAction<FormSubmitAction>;
+	private submitAction: FormSubmitAction;
+	private _isSubmitting: boolean;
 
 	constructor( { fields, onSubmit = () => undefined }: FormParams ) {
 		this.fields = fields;
 		this.submitAction = wrapInAsyncAction( onSubmit );
+		this._isSubmitting = false;
 
 		this.attachFields();
 
@@ -60,7 +61,7 @@ export default class Form {
 	}
 
 	get isSubmitting() {
-		return this.submitAction.isExecuting;
+		return this._isSubmitting;
 	}
 
 	field<FieldType extends Field<ValueType<FieldType>> = Field<unknown>>( fieldKey: string ) {
@@ -79,7 +80,7 @@ export default class Form {
 		this.syncFieldErrors();
 		if ( !this.isValid || this.isSubmitting ) return;
 
-		await this.submitAction.execute( this );
+		await this.executeSubmitAction();
 	}
 
 	clear() {
@@ -112,6 +113,13 @@ export default class Form {
 
 	private syncFieldErrors() {
 		forEach( this.fields, field => field.syncError() );
+	}
+
+	private executeSubmitAction() {
+		this._isSubmitting = true;
+
+		return this.submitAction( this )
+			.finally( action( () => { this._isSubmitting = false; } ) );
 	}
 
 	private eachField( actionOnField: ( field: Field<unknown> ) => void ) {
