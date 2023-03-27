@@ -26,7 +26,7 @@ Remember that, since a select is just a `ManualField`, for changing its value yo
 **Example**:
 
 ```ts
-import { select } from '@amalgama/mobx-form';
+import { select } from '@amalgamaco/mobx-form';
 
 const form = new Form( {
 	fields: {

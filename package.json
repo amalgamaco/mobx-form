@@ -1,5 +1,5 @@
 {
-	"name": "@amalgama/mobx-form",
+	"name": "@amalgamaco/mobx-form",
 	"version": "1.2.0",
 	"description": "A set of classes for managing forms and fields with MobX.",
 	"main": "dist/index.js",
@@ -17,7 +17,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git@git.amalgama.co:amalgama/packages/npm/mobx-form.git"
+		"url": "git@github.com:amalgamaco/mobx-form.git"
 	},
 	"keywords": [
 		"form",
@@ -27,10 +27,9 @@
 	],
 	"license": "ISC",
 	"publishConfig": {
-		"@amalgama:registry": "https://git.amalgama.co/api/v4/projects/982/packages/npm/"
+		"access": "public"
 	},
 	"dependencies": {
-		"@amalgama/mobx-async-action": "^1.0.2",
 		"@types/lodash": "^4.14.186",
 		"@types/validator": "^13.7.8",
 		"lodash": "^4.17.21",
@@ -83,21 +82,15 @@
 	"release-it": {
 		"git": {
 			"tagName": "v${version}",
-			"requireCleanWorkingDir": false,
-			"requireUpstream": true,
 			"commitMessage": "Release v${version}",
-			"changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --issue-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/issues/{id} --merge-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/merge_requests/{id} --commit-url https://git.amalgama.co/amalgama/packages/npm/mobx-form/-/commit/{id}"
+			"changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --issue-url https://github.com/amalgamaco/mobx-form/issues/{id} --merge-url https://github.com/amalgamaco/mobx-form/pull/{id} --commit-url https://github.com/amalgamaco/mobx-form/commit/{id}"
 		},
 		"hooks": {
 			"after:bump": "npx auto-changelog -p"
 		},
-		"gitlab": {
+		"github": {
 			"release": true,
-			"publish": true,
 			"releaseName": "Release v${version}"
-		},
-		"npm": {
-			"skipChecks": true
 		}
 	}
 }

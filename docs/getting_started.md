@@ -1,6 +1,14 @@
 # Getting started
 
-[[_TOC_]]
+- [Getting started](#getting-started)
+  * [Creating a form](#creating-a-form)
+    + [Forms for updating some information](#forms-for-updating-some-information)
+  * [Using form methods](#using-form-methods)
+  * [Rendering a form](#rendering-a-form)
+  * [Triggering side effects when interacting with fields](#triggering-side-effects-when-interacting-with-fields)
+    + [onChange](#onchange)
+    + [onFocus and onBlur](#onfocus-and-onblur)
+  * [Tweaking global configuration](#tweaking-global-configuration)
 
 ## Creating a form
 If you need a form in your app, then just create an instance of `Form` with the fields you need. For example, this creates a sign up form with two text inputs, `email` and `password`, and performs the sign up on submit:
@@ -12,7 +20,7 @@ import {
 	minLength,
 	required,
 	textInput
-} from '@amalgama/mobx-form';
+} from '@amalgamaco/mobx-form';
 
 ...
 
@@ -39,7 +47,9 @@ const form = new Form( {
 } );
 ```
 
-Where do you create this form? If you follow Amalgama's MobX architecture then you will probably want to create it inside a presenter that models the screen in which you need the form, storing it as a property.
+Where do you create this form? The simplest way is to create it as part of the state of the component in which you will render the form, i.e. create it with a `useState` call. The form instance will always be the same but, since it is a MobX observable, the actions on it will trigger the appropriate re-renders as long as you wrap your component with the [`observer`](https://mobx.js.org/react-integration.html#react-integration) HoC from `mobx-react` or `mobx-react-lite` packages.
+
+However, you are free to use any variant you wish, such us accessing it through a prop, through a React context, storing it inside another, bigger MobX observable object that your component uses, etc.
 
 ### Forms for updating some information
 
@@ -56,7 +66,7 @@ import {
 	required,
 	select,
 	textInput
-} from '@amalgama/mobx-form';
+} from '@amalgamaco/mobx-form';
 
 ...
 
@@ -210,7 +220,7 @@ There are some configuration options that affect multiple parts of the library; 
 If you want to change the default validation messages across your app, and, for example, you want all of your inputs to display their error messages only when the form is submitted (by default) then you can easily achieve this by tweaking the global `config` object (typically in some module initialization):
 
 ```ts
-import { config } from '@amalgama/mobx-form';
+import { config } from '@amalgamaco/mobx-form';
 
 // Change the default error-display behaviour for inputs
 config.inputs.showErrors = 'onSubmit';
@@ -224,7 +234,7 @@ config.validators.required.message = 'This field is required';
 You can also use the function `configure` that lets you specify only the options you want to override in a single object. This is how you would use it to change the same options from above:
 
 ```ts
-import { configure } from '@amalgama/mobx-form';
+import { configure } from '@amalgamaco/mobx-form';
 
 configure( {
 	inputs: {

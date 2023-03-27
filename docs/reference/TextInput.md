@@ -7,7 +7,7 @@ The most common type of field. A `TextInput` is just an [`Input<string>`](./Inpu
 Example:
 
 ```ts
-import { textInput } from '@amalgama/mobx-form';
+import { textInput } from '@amalgamaco/mobx-form';
 
 const form = new Form( {
 	fields: {

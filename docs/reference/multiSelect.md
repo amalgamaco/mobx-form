@@ -23,7 +23,7 @@ Remember that, since a multi select is just a `ManualField`, for changing its va
 **Example**:
 
 ```ts
-import { multiSelect } from '@amalgama/mobx-form';
+import { multiSelect } from '@amalgamaco/mobx-form';
 
 const form = new Form( {
 	fields: {
