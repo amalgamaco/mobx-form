@@ -5,16 +5,32 @@ If you need to make a form in your ReactJS or React Native app, and you already 
 
 It gives you a [Form](docs/reference/Form.md) class and classes for different types of fields. These classes provide you with MobX-observable instances whose behaviors involve changing field/form state, validating it, showing error messages at the correct time, handling submit, etc, in pure OOP style, and all you have to do is plug-in these instances in your form and field UI components which will need little to zero state management but will give life to your form.
 
-## Installation
+## Getting started
 
-Run the following command to add the `MobX Form` library to your project:
+### Installation
+
+First, make sure [MobX](https://github.com/mobxjs/mobx) is part of your project's dependencies.
+
+Then you can run the following command to add the `MobX Form` library to your project:
+
+```bash
+npm install @amalgamaco/mobx-form
+```
+
+Or, if you are using Yarn:
 
 ```bash
 yarn add @amalgamaco/mobx-form
 ```
 
-## Getting started
+### Usage
 
-If you want to take a quick look at how this library is used then you can go ahead with the [Getting started](docs/getting_started.md) section. Apart from that:
-- The [Design principles](docs/design_principles.md) section covers the core ideas behind this library and how it is meant to be used.
-- The [Reference](docs/reference.md) section provides details about available classes, methods, parameters, etc.
+If you want to take a quick look at how this library is used then you can go ahead with the [Usage](docs/usage.md) section of the documentation.
+
+### Design principles
+
+The [Design principles](docs/design_principles.md) section covers the core ideas behind this library and how it is meant to be used.
+
+### Reference
+
+The [Reference](docs/reference.md) section provides details about available classes, methods, parameters, etc.
