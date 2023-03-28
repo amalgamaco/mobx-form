@@ -91,6 +91,9 @@
 		"github": {
 			"release": true,
 			"releaseName": "Release v${version}"
+		},
+		"npm": {
+			"skipChecks": true
 		}
 	}
 }
