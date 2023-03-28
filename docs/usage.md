@@ -1,16 +1,18 @@
-# Getting started
+# Usage
 
-- [Getting started](#getting-started)
-  * [Creating a form](#creating-a-form)
-    + [Forms for updating some information](#forms-for-updating-some-information)
-  * [Using form methods](#using-form-methods)
-  * [Rendering a form](#rendering-a-form)
-  * [Triggering side effects when interacting with fields](#triggering-side-effects-when-interacting-with-fields)
-    + [onChange](#onchange)
-    + [onFocus and onBlur](#onfocus-and-onblur)
-  * [Tweaking global configuration](#tweaking-global-configuration)
+## Table of Contents
+
+- [Creating a form](#creating-a-form)
+	* [Forms for updating some information](#forms-for-updating-some-information)
+- [Using form methods](#using-form-methods)
+- [Rendering a form](#rendering-a-form)
+- [Triggering side effects when interacting with fields](#triggering-side-effects-when-interacting-with-fields)
+	* [onChange](#onchange)
+	* [onFocus and onBlur](#onfocus-and-onblur)
+- [Tweaking global configuration](#tweaking-global-configuration)
 
 ## Creating a form
+
 If you need a form in your app, then just create an instance of `Form` with the fields you need. For example, this creates a sign up form with two text inputs, `email` and `password`, and performs the sign up on submit:
 
 ```ts
