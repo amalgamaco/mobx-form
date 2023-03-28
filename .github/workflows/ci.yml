@@ -54,6 +54,15 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting.
           fetch-depth: 0
+      
+      # Download coverage artifacts
+      - uses: actions/download-artifact@v3
+        with:
+          name: reports
+          path: reports/
+
+      # Remove absolute paths from coverage file
+      - run: sed -i.bk 's/SF:.*\/mobx-form\/\(.*\)/SF:\1/' reports/coverage/lcov.info
 
       # Triggering SonarQube analysis as results of it are required by Quality Gate check.
       - name: SonarQube Scan
