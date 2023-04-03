@@ -24,9 +24,10 @@ export default class Form {
 
 		this.attachFields();
 
-		makeObservable<Form, 'fields' | 'submitAction'>( this, {
+		makeObservable<Form, 'fields' | 'submitAction' | '_isSubmitting' >( this, {
 			fields: observable,
 			submitAction: observable,
+			_isSubmitting: observable,
 			values: computed,
 			dirtyValues: computed,
 			isValid: computed,
