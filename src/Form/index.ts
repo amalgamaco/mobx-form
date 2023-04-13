@@ -132,4 +132,10 @@ export default class Form {
 	}
 }
 
-export type { FormParams, FormValues };
+export type {
+	FormFields,
+	FormParams,
+	FormSubmitAction,
+	FormSubmitCallback,
+	FormValues
+} from './types';
