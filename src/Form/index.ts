@@ -77,11 +77,11 @@ export default class Form {
 		return this.field<FieldType>( fieldKey );
 	}
 
-	async submit() {
+	submit(): Promise<void> {
 		this.syncFieldErrors();
-		if ( !this.isValid || this.isSubmitting ) return;
+		if ( !this.isValid || this.isSubmitting ) return Promise.resolve();
 
-		await this.executeSubmitAction();
+		return this.executeSubmitAction();
 	}
 
 	clear() {
