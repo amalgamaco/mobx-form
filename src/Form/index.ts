@@ -38,7 +38,8 @@ export default class Form {
 			submit: action,
 			clear: action,
 			reset: action,
-			showErrors: action
+			showErrors: action,
+			clearErrors: action
 		} );
 	}
 
@@ -103,6 +104,10 @@ export default class Form {
 
 	showErrors( errors: Record<string, string> ) {
 		forEach( errors, ( error, fieldKey ) => this.showErrorOnField( fieldKey, error ) );
+	}
+
+	clearErrors() {
+		this.eachField( field => field.clearError() );
 	}
 
 	private attachFields() {

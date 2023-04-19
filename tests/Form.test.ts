@@ -435,4 +435,19 @@ describe( 'Form', () => {
 			expect( () => form.showErrors( { age: 'Invalid' } ) ).not.toThrow();
 		} );
 	} );
+
+	describe( '@clearErrors', () => {
+		it( 'clears the error messages on all fields', () => {
+			const form = createForm();
+
+			form.submit(); // Form is invalid, so error messages will show up
+			form.showErrors( { email: 'This email has a problem' } );
+
+			form.clearErrors();
+
+			form.eachField( ( field ) => {
+				expect( field.error ).toEqual( '' );
+			} );
+		} );
+	} );
 } );

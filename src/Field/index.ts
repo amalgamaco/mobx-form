@@ -34,6 +34,7 @@ export default abstract class Field<ValueType> {
 			reset: action,
 			syncError: action,
 			showError: action,
+			clearError: action,
 			attachToForm: action
 		} );
 	}
@@ -82,6 +83,10 @@ export default abstract class Field<ValueType> {
 
 	showError( errorMessage: string ) {
 		this._presentedError = errorMessage;
+	}
+
+	clearError() {
+		this.showError( '' );
 	}
 
 	attachToForm( form: Form ) {

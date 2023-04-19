@@ -25,6 +25,8 @@ describe( 'Field', () => {
 		...params
 	} );
 
+	const createInvalidField = () => createField( { value: 'Too loong' } );
+
 	describe( 'constructor', () => {
 		it( 'assigns the given attributes to the field', () => {
 			const field = createField();
@@ -241,6 +243,42 @@ describe( 'Field', () => {
 			field.showError( error );
 
 			expect( field.error ).toEqual( error );
+		} );
+	} );
+
+	describe( '@clearError', () => {
+		describe( 'when no error is being shown', () => {
+			it( 'does not show any error', () => {
+				const field = createInvalidField();
+
+				field.clearError();
+
+				expect( field.error ).toEqual( '' );
+			} );
+		} );
+
+		describe( 'when an error is being shown', () => {
+			describe( 'and it was manually set', () => {
+				it( 'hides the error', () => {
+					const field = createField();
+
+					field.showError( 'Something went wrong' );
+					field.clearError();
+
+					expect( field.error ).toBe( '' );
+				} );
+			} );
+
+			describe( 'and it comes from a failed validation', () => {
+				it( 'hides the error', () => {
+					const field = createInvalidField();
+
+					field.syncError();
+					field.clearError();
+
+					expect( field.error ).toBe( '' );
+				} );
+			} );
 		} );
 	} );
 
