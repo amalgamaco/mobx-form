@@ -92,6 +92,20 @@ describe( 'Form', () => {
 
 	afterEach( () => jest.clearAllMocks() );
 
+	describe( '@fields', () => {
+		it( 'returns an object with all the fields indexed by their keys', () => {
+			const form = createForm();
+
+			expect( form.fields ).toEqual( {
+				email: form.field( 'email' ),
+				password: form.field( 'password' ),
+				passwordConfirmation: form.field( 'passwordConfirmation' ),
+				document: form.field( 'document' ),
+				admin: form.field( 'admin' )
+			} );
+		} );
+	} );
+
 	describe( '@values', () => {
 		it( 'returns an object with values per field key', () => {
 			const form = createForm();
@@ -240,6 +254,21 @@ describe( 'Form', () => {
 			expect( documentField.label ).toEqual( 'Document' );
 			expect( documentField.value ).toEqual( 'unused' );
 			expect( documentField.isDisabled ).toBe( true );
+		} );
+	} );
+
+	describe( '@eachField', () => {
+		it( 'executes the given callback for each field', () => {
+			const form = createForm();
+			const fieldLabels: string[] = [];
+
+			form.eachField( ( field ) => {
+				fieldLabels.push( field.label );
+			} );
+
+			expect( fieldLabels ).toEqual(
+				Object.values( fields ).map( ( { label } ) => label )
+			);
 		} );
 	} );
 
@@ -394,10 +423,7 @@ describe( 'Form', () => {
 				document: 'This document failed the external validation'
 			};
 
-			form.showErrors( {
-				email: 'This email is being used',
-				document: 'This document failed the external validation'
-			} );
+			form.showErrors( errors );
 
 			expect( form.field( 'email' ).error ).toEqual( errors.email );
 			expect( form.field( 'document' ).error ).toEqual( errors.document );
