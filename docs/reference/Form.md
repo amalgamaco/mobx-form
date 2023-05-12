@@ -24,6 +24,14 @@ Note that the `onSubmit` callback may or may not return a promise, but the form 
 
 This means that, when submitting the form, you can opt to do something synchronously, or asynchronously; the latter is the most common option since a request is usually sent to a web service.
 
+### fields
+
+```ts
+fields: Record<string, Field<unknown>>
+```
+
+Returns an object where each key is the identifier of a field and the value is the field itself.
+
 ### values
 
 ```ts
@@ -164,6 +172,14 @@ select<T>( fieldKey: string ): T
 ```
 
 Alias of `field`.
+
+### eachField
+
+```ts
+eachField( actionOnField: ( field: Field<unknown> ) => void ): void
+```
+
+A method for looping through all fields. Executes the given callback for each of them.
 
 ### submit
 
