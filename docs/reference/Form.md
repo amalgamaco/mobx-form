@@ -218,4 +218,12 @@ Resets all the fields (calls [`reset`](Field.md#reset) on each of them).
 showErrors( errors: Record<string, string> ): void
 ```
 
-This method is like a shortcut for calling `showError` on each field. Basically, for each key-error pair in the given `errors` object, shows the error message in the field identified by the key. Can be useful if the backend returns errors for each field and they can be directly shown on the form.
+This method is like a shortcut for calling [`showError`](Field.md#showError) on each field. Basically, for each key-error pair in the given `errors` object, shows the error message in the field identified by the key. Can be useful if the backend returns errors for each field and they can be directly shown on the form.
+
+### clearErrors
+
+```ts
+clearErrors(): void
+```
+
+Clears error messages for all fields, by calling [`clearError`](Field.md#clearError) on each of them.

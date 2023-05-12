@@ -138,6 +138,14 @@ showError( errorMessage: string ): void
 
 Forces the field to show the given error message, overriding whatever `error` was returning. This does not depend on, nor affect at all, the validity state of the field. The method is intended to show errors coming from the backend, with an informative purpose only (for the end user). Ideal for "email already registered" or similar errors.
 
+### clearError
+
+```ts
+clearError(): void
+```
+
+Clears the error message currently being shown. This will clear errors that came from failed validations as well as errors displayed with the [`showError`](#showError) method. In either case, it doesn't affect the validity state of the field at all.
+
 ### syncError
 
 ```ts
