@@ -1,15 +1,21 @@
-import Field from '../Field';
+import type Field from '../Field';
 import type Form from '.';
 
-export type FormSubmitCallback = ( form: Form ) => void | Promise<void>;
-export type FormSubmitAction = ( form: Form ) => Promise<void>;
+export type FormFields<ValueTypes, KeyTypes extends PropertyKey = PropertyKey>
+	= Record<KeyTypes, Field<ValueTypes>>;
 
-export interface FormParams {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	fields: Record<string, Field<any>>,
-	onSubmit?: FormSubmitCallback
+export type FormValues<F, K extends keyof F> = Record<K, unknown>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FormSubmitCallback<T extends FormFields<any>>
+	= ( form: Form<T> ) => void | Promise<void>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type FormSubmitAction<T extends FormFields<any>>
+	= ( form: Form<T> ) => Promise<unknown>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface FormParams<T extends FormFields<any, keyof T>> {
+	fields: T,
+	onSubmit?: FormSubmitCallback<T>
 }
-
-export type FormFields = Record<string, Field<unknown>>;
-
-export type FormValues = Record<string, unknown>;
