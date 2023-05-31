@@ -12,19 +12,20 @@ import { valuesOf, wrapInAsyncAction } from './utils';
 import type { ValueType } from '../utils/types';
 import deprecatedMethod from '../utils/deprecatedMethod';
 
-export default class Form {
-	private _fields: FormFields;
-	private submitAction: FormSubmitAction;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default class Form<Fields extends FormFields<any> = FormFields<any>> {
+	private _fields: Fields;
+	private submitAction: FormSubmitAction<Fields>;
 	private _isSubmitting: boolean;
 
-	constructor( { fields, onSubmit = () => undefined }: FormParams ) {
+	constructor( { fields, onSubmit = () => undefined }: FormParams<Fields> ) {
 		this._fields = fields;
 		this.submitAction = wrapInAsyncAction( onSubmit );
 		this._isSubmitting = false;
 
 		this.attachFields();
 
-		makeObservable<Form, '_fields' | 'submitAction' | '_isSubmitting' >( this, {
+		makeObservable<Form<Fields>, '_fields' | 'submitAction' | '_isSubmitting' >( this, {
 			_fields: observable,
 			submitAction: observable,
 			_isSubmitting: observable,
@@ -42,20 +43,20 @@ export default class Form {
 		} );
 	}
 
-	get fields(): FormFields {
+	get fields() {
 		return clone( this._fields );
 	}
 
-	get values(): FormValues {
+	get values() {
 		return valuesOf( this._fields );
 	}
 
-	get dirtyValues(): FormValues {
-		return valuesOf( this.dirtyFields );
+	get dirtyValues() {
+		return valuesOf( this.dirtyFields as Fields ) as Partial<Fields>;
 	}
 
 	get isValid() {
-		return every( this.enabledFields, field => field.isValid );
+		return every( this.enabledFields, field => field && field.isValid );
 	}
 
 	get isDirty() {
@@ -86,7 +87,7 @@ export default class Form {
 		forEach( this._fields, actionOnField );
 	}
 
-	submit(): Promise<void> {
+	submit(): Promise<unknown> {
 		this.syncFieldErrors();
 		if ( !this.isValid || this.isSubmitting ) return Promise.resolve();
 
@@ -106,7 +107,7 @@ export default class Form {
 	}
 
 	private attachFields() {
-		forEach( this._fields, field => field.attachToForm( this ) );
+		forEach( this._fields, field => field.attachToForm( this as unknown as Form ) );
 	}
 
 	private get dirtyFields() {
@@ -117,7 +118,7 @@ export default class Form {
 		return this.pickFieldsBy( field => !field.isDisabled );
 	}
 
-	private pickFieldsBy( predicate: ( field: Field<unknown> ) => boolean ): FormFields {
+	private pickFieldsBy( predicate: <K extends keyof Fields>( field: Fields[K] ) => boolean ) {
 		return pickBy( this._fields, predicate );
 	}
 

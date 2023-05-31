@@ -1,7 +1,7 @@
 import ManualField from '../src/ManualField';
 import TestField from './support/TestField';
-import Form, { FormParams } from '../src/Form';
-import { invalid, valid } from '../src/validators';
+import Form from '../src/Form';
+import { invalid, valid } from '../src';
 
 describe( 'Form', () => {
 	const required = ( value: string ) => (
@@ -53,7 +53,7 @@ describe( 'Form', () => {
 
 	const onSubmit = jest.fn( () => Promise.resolve() );
 
-	const createForm = ( params?: Partial<FormParams> ) => new Form( {
+	const createForm = ( params?: Partial<ConstructorParameters<typeof Form>[0]> ) => new Form( {
 		fields: {
 			email: new TestField( fields.email ),
 			password: new TestField( fields.password ),
@@ -65,8 +65,8 @@ describe( 'Form', () => {
 		...params
 	} );
 
-	const createFormAndMakeItValid = ( params?: Partial<FormParams> ) => {
-		const form = createForm( params );
+	const createFormAndMakeItValid = () => {
+		const form = createForm();
 
 		form.field<TestField>( 'password' ).change( 'validpass' );
 		form.field<TestField>( 'passwordConfirmation' ).change( 'validpass' );
